@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_todo"
+            android:icon="@drawable/ic_todo_96dp"
+            android:title="待办事项"
+            />
+
+        <item
+            android:id="@+id/nav_clock"
+            android:icon="@drawable/ic_clock_96dp"
+            android:title="锤子时钟"
+            />
+
+        <item
+            android:id="@+id/nav_record"
+            android:icon="@drawable/ic_record_96dp"
+            android:title="记录"
+            />
+
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_setting_96dp"
+            android:title="设置"
+            />
+
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about_96dp"
+            android:title="关于"
+            />
+    </group>
+</menu>

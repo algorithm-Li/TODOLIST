@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#137B85</color>
+    <color name="colorPrimaryDark">#137B85</color>
+    <color name="colorAccent">#54aadb</color>
+
+    <!--#b9f2ec
+        #9ec3e0
+        #54aadb
+    -->
+
+    <color name="text_TimelineView">#4D4D4D</color>
+
+    <color name="black_semi">#3B3B3B</color>
+
+    <color name="grey">#14d0d0d0</color>
+
+
+</resources>

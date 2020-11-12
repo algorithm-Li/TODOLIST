@@ -1,0 +1,53 @@
+package com.example.todolist.Adapter;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import java.util.List;
+
+public class FragmentAdapter extends FragmentStatePagerAdapter {
+
+    private List<Fragment> fragmentList;
+    private List<String> tab_titles;
+
+    //构造
+    public FragmentAdapter(FragmentManager fm, List<Fragment> fragmentList, List<String> titles) {
+        super(fm);
+        this.fragmentList = fragmentList;
+        this.tab_titles = titles;
+    }
+
+    /**
+     * 获取Fragment
+     * @param position
+     * @return
+     */
+    @NonNull
+    @Override
+    public Fragment getItem(int position) {
+        return fragmentList.get(position);
+    }
+
+    /**
+     * 获取总量
+     * @return
+     */
+    @Override
+    public int getCount() {
+        return fragmentList.size();
+    }
+
+    /**
+     * 获取tab_title
+     * @param position
+     * @return
+     */
+    @Override
+    public CharSequence getPageTitle(int position){
+        return tab_titles.get(position);
+    }
+}
+
+

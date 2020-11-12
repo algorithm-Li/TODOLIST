@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TodoList</string>
+
+    <string name="action_settings">设置</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="tab_title_main_1">待办事项</string>
+    <string name="tab_title_main_2">锤子时钟</string>
+    <string name="tab_title_main_3">待办事项test</string>
+
+
+</resources>

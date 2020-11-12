@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/task_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            tools:text="1."
+            />
+
+        <com.sackcentury.shinebuttonlib.ShineButton
+            android:id="@+id/task_button"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@android:color/darker_gray"
+            app:btn_color="@android:color/darker_gray"
+            app:btn_fill_color="#FF6666"
+            app:allow_random_color="false"
+            app:enable_flashing="false"
+            app:big_shine_color="#FF6666"
+            app:click_animation_duration="200"
+            app:shine_animation_duration="1500"
+            app:shine_turn_angle="10"
+            app:small_shine_offset_angle="20"
+            app:small_shine_color="#CC9999"
+            app:shine_count="8"
+            app:siShape="@raw/radio_button_1"
+            android:layout_toEndOf="@+id/task_id"
+            android:layout_centerVertical="true"
+            />
+
+        <TextView
+            android:id="@+id/task_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/task_button"
+            tools:text="子任务内容"
+            android:layout_marginStart="5dp"/>
+
+    </RelativeLayout>
+</LinearLayout>
