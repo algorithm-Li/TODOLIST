@@ -43,27 +43,27 @@
             />
 
         <TextView
-            android:id="@+id/mTitle"
+            android:id="@+id/myTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="10dp"
             android:textColor="@color/colorPrimary"
-            android:textSize="16sp"
-            tools:text="标题" />
+            android:textSize="12sp"
+            tools:text="时间" />
 
         <TextView
-            android:id="@+id/mSource"
+            android:id="@+id/myTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/mTitle"
-            android:layout_alignStart="@+id/mTitle"
+            android:layout_below="@+id/myTime"
+            android:layout_alignStart="@+id/myTime"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
+            android:layout_marginBottom="5dp"
+
             android:textColor="@color/colorPrimary"
-            android:textSize="14sp"
-            tools:text="来源" />
+            android:textSize="18sp"
+            tools:text="标题" />
 
 
         <ImageView
@@ -80,13 +80,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/mRight"
-            android:layout_alignTop="@+id/mSource"
+            android:layout_alignTop="@+id/myTitle"
             android:layout_marginEnd="20dp"
             android:layout_below="@id/mRight"
             android:gravity="center"
             android:textColor="@color/colorPrimary"
             android:textSize="14sp"
-
             tools:text="完成度" />
 
     </RelativeLayout>
@@ -97,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="5dp"
-        android:alpha="100"
+        android:alpha="0"
         android:orientation="vertical">
 
         <!--android:alpha="0"-->
@@ -108,35 +107,26 @@
             android:background="#E9EDEE" />
 
         <RelativeLayout
+            android:id="@+id/inner_relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
             <TextView
-                android:id="@+id/mReferee"
+                android:id="@+id/myDsc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingStart="0dp"
+                android:paddingEnd="30dp"
                 android:layout_marginStart="0dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"
-                tools:text="推荐人" />
-
-            <TextView
-                android:id="@+id/mLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/mReferee"
-                android:layout_alignStart="@+id/mReferee"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/colorAccent"
-                android:textSize="14sp"
-                tools:text="www.baidu.com" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                tools:text="描述" />
 
             <Button
+                android:id="@+id/add_task"
                 android:layout_width="29dp"
                 android:layout_height="29dp"
                 android:layout_alignParentEnd="true"
@@ -148,15 +138,13 @@
                 android:id="@+id/task_rlv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/mLink"
-                android:layout_alignStart="@+id/mLink">
+                android:layout_below="@+id/myDsc"
+                android:layout_alignStart="@+id/myDsc">
 
 
             </androidx.recyclerview.widget.RecyclerView>
 
         </RelativeLayout>
-
-
 
     </LinearLayout>
 

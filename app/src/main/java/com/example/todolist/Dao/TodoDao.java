@@ -52,7 +52,6 @@ public class TodoDao {
         values.put("isFinish",todos.getIsFinish());
         long tid = database.insert("Todos",null,values);
         close();
-        Log.d("texxt", Long.toString(tid));
         return tid;
     }
 
@@ -113,7 +112,7 @@ public class TodoDao {
         }
         cursor.close();
         close();
-        Log.i("ToDoDao", "查询到本地的任务个数：" + todosList.size());
+        Log.i("TodoDao", "查询到本地的任务个数：" + todosList.size());
         return todosList;
     }
 
@@ -127,21 +126,25 @@ public class TodoDao {
         ContentValues values = new ContentValues();
         values.put("isAlerted", 1);
         Log.i("ToDoDao", String.valueOf(tid));
-        database.update("Todos", values, "id = ?", new String[]{tid + ""});
+        database.update("Todos", values, "tid = ?", new String[]{tid + ""});
         close();
     }
 
     /**
-     * 设置待办事项已完成
+     * 设置待办事项完成、失败
      * @param tid
      */
-    public void setisFinish(int tid){
+    public void setisFinish(int tid,boolean checked){
         open();
-        Log.i("ToDoDao", "数据已更新");
+        Log.i("TodoDao", "数据已更新");
         ContentValues values = new ContentValues();
-        values.put("isFinish", 1);
-        Log.i("ToDoDao", String.valueOf(tid));
-        database.update("Todos", values, "id = ?", new String[]{tid + ""});
+        if(checked){
+            values.put("isFinish", 1);
+        }else{
+            values.put("isFinish", 0);
+        }
+        Log.i("TodoDao", String.valueOf(tid));
+        database.update("Todos", values, "tid = ?", new String[]{tid + ""});
         close();
     }
 
@@ -165,4 +168,128 @@ public class TodoDao {
         close();
     }
 
+    /**
+     * 获取F_tid是传进参数tid的Todos
+     */
+    public List<Todos> getTaskTodos(int tid){
+        open();
+        List<Todos> todosList = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM Todos where F_tid = ?",new String[]{tid+""});
+        while(cursor.moveToNext()) {
+            Todos data = new Todos();
+            data.setTid(cursor.getInt(cursor.getColumnIndex("tid")));
+            data.setTitle(cursor.getString(cursor.getColumnIndex("todotitle")));
+            data.setDsc(cursor.getString(cursor.getColumnIndex("tododsc")));
+            data.setDate(cursor.getString(cursor.getColumnIndex("tododate")));
+            data.setTime(cursor.getString(cursor.getColumnIndex("todotime")));
+            data.setRemindTime(cursor.getLong(cursor.getColumnIndex("remindTime")));
+            data.setRemindTimeNoDay(cursor.getLong(cursor.getColumnIndex("remindTimeNoDay")));
+            data.setIsAlerted(cursor.getInt(cursor.getColumnIndex("isAlerted")));
+            data.setIsRepeat(cursor.getInt(cursor.getColumnIndex("isRepeat")));
+            data.setImgId(cursor.getInt(cursor.getColumnIndex("imgId")));
+            data.setDbObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+            data.setF_tid(cursor.getInt(cursor.getColumnIndex("F_tid")));
+            data.setIsFinish(cursor.getInt(cursor.getColumnIndex("isFinish")));
+            todosList.add(data);
+        }
+        cursor.close();
+        close();
+        return todosList;
+    }
+
+    /**
+     * 获取所有father todos
+     */
+    public List<Todos> getAllFatherTodos(){
+        open();
+        List<Todos> todosList = new ArrayList<>();
+        Cursor cursor = database.rawQuery("SELECT * FROM Todos where F_tid == null or F_tid == 0",null);
+        while(cursor.moveToNext()) {
+            Todos data = new Todos();
+            data.setTid(cursor.getInt(cursor.getColumnIndex("tid")));
+            data.setTitle(cursor.getString(cursor.getColumnIndex("todotitle")));
+            data.setDsc(cursor.getString(cursor.getColumnIndex("tododsc")));
+            data.setDate(cursor.getString(cursor.getColumnIndex("tododate")));
+            data.setTime(cursor.getString(cursor.getColumnIndex("todotime")));
+            data.setRemindTime(cursor.getLong(cursor.getColumnIndex("remindTime")));
+            data.setRemindTimeNoDay(cursor.getLong(cursor.getColumnIndex("remindTimeNoDay")));
+            data.setIsAlerted(cursor.getInt(cursor.getColumnIndex("isAlerted")));
+            data.setIsRepeat(cursor.getInt(cursor.getColumnIndex("isRepeat")));
+            data.setImgId(cursor.getInt(cursor.getColumnIndex("imgId")));
+            data.setDbObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+            data.setF_tid(cursor.getInt(cursor.getColumnIndex("F_tid")));
+            data.setIsFinish(cursor.getInt(cursor.getColumnIndex("isFinish")));
+            todosList.add(data);
+        }
+        cursor.close();
+        close();
+        return todosList;
+    }
+
+    /**
+     * 获取一个Todo，tid为参数值
+     */
+    public Todos getOneTodo(int tid){
+        open();
+        Cursor cursor = database.rawQuery("SELECT * FROM Todos where tid = ?",new String[]{tid+""});
+        Todos data = new Todos();
+        while(cursor.moveToNext()) {
+            data.setTid(cursor.getInt(cursor.getColumnIndex("tid")));
+            data.setTitle(cursor.getString(cursor.getColumnIndex("todotitle")));
+            data.setDsc(cursor.getString(cursor.getColumnIndex("tododsc")));
+            data.setDate(cursor.getString(cursor.getColumnIndex("tododate")));
+            data.setTime(cursor.getString(cursor.getColumnIndex("todotime")));
+            data.setRemindTime(cursor.getLong(cursor.getColumnIndex("remindTime")));
+            data.setRemindTimeNoDay(cursor.getLong(cursor.getColumnIndex("remindTimeNoDay")));
+            data.setIsAlerted(cursor.getInt(cursor.getColumnIndex("isAlerted")));
+            data.setIsRepeat(cursor.getInt(cursor.getColumnIndex("isRepeat")));
+            data.setImgId(cursor.getInt(cursor.getColumnIndex("imgId")));
+            data.setDbObjectId(cursor.getString(cursor.getColumnIndex("objectId")));
+            data.setF_tid(cursor.getInt(cursor.getColumnIndex("F_tid")));
+            data.setIsFinish(cursor.getInt(cursor.getColumnIndex("isFinish")));
+        }
+        cursor.close();
+        close();
+        return data;
+    }
+
+    /**
+     * 删除一个 tid 是传进参数 tid 的todo表单
+     */
+    public void deleteFatherTodo(int tid){
+        open();
+        database.delete("Todos","tid = ?",new String[]{tid+""});
+        close();
+    }
+
+    /**
+     * 删除所有 F_tid 是传进参数 F_tid的 todo表单
+     */
+    public void deleteTaskTodo(int F_tid){
+        open();
+        database.delete("Todos","F_tid = ?",new String[]{F_tid+""});
+        close();
+    }
+
+    /**
+     * 更新 某个todo 的数据
+     */
+    public void updateOneTodo(int tid,Todos data){
+        this.open();
+        ContentValues values = new ContentValues();
+        values.put("todotitle",data.getTitle());
+        values.put("tododsc",data.getDsc());
+        values.put("tododate",data.getDate());
+        values.put("todotime",data.getTime());
+        values.put("remindTime",data.getRemindTime());
+        values.put("remindTimeNoDay",data.getRemindTimeNoDay());
+        values.put("isAlerted",data.getIsAlerted());
+        values.put("isRepeat",data.getIsRepeat());
+        values.put("imgId",data.getImgId());
+        values.put("F_tid",data.getF_tid());
+        values.put("isFinish",data.getIsFinish());
+        Log.d("update",tid+"");
+        database.update("Todos",values,"tid = ?",new String[]{tid+""});
+        close();
+    }
 }

@@ -8,8 +8,4 @@
     <!--浮动按钮边界值，参数-->
     <dimen name="fab_margin">16dp</dimen>
 
-    <!--浮动按钮大小，参数-->
-    <dimen name="fab_size_normal">100dp</dimen>
-
-
 </resources>

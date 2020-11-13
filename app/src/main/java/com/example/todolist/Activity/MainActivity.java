@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -25,7 +24,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.todolist.Adapter.FragmentAdapter;
@@ -33,15 +31,14 @@ import com.example.todolist.Bean.Todos;
 import com.example.todolist.DBHelper.MyDatabaseHelper;
 import com.example.todolist.Dao.TodoDao;
 import com.example.todolist.Fragment.ClockFragment;
-import com.example.todolist.Fragment.TestFragment;
 import com.example.todolist.Fragment.TodoFragment;
 import com.example.todolist.R;
-import com.example.todolist.Utils.SPUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.kekstudio.dachshundtablayout.DachshundTabLayout;
 import com.kekstudio.dachshundtablayout.indicators.DachshundIndicator;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -153,39 +150,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         //初始化滑动分页
         initViewPager();
-
-
-        //在Todo表里插入一波数据
-/*
-        String str=null;
-        SPUtils.get(this,"todos", str);
-        if(str==null){
-            SPUtils.put(this,"todos","test_data");
-            List<Todos> todosList = new ArrayList<Todos>();
-            todosList.add(new Todos("测试1","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试2","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试3","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试4","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试5","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试6","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试7","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试8","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试9","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试10","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试11","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试12","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试13","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试14","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试15","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试16","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试17","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试18","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试19","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            todosList.add(new Todos("测试20","双11到了",new Date().toString(),"19:00",123456L,R.drawable.ic_nav_bg,0,0));
-            TodoDao todoDao = new TodoDao(this);
-            todoDao.saveAll(todosList);
-        }*/
-
     }
 
     /**
@@ -207,16 +171,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         List<String> tab_titles = new ArrayList<>();
         tab_titles.add(getString(R.string.tab_title_main_1));
         tab_titles.add(getString(R.string.tab_title_main_2));
-        tab_titles.add(getString(R.string.tab_title_main_3));
 
         //获取Fragment
         List<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new TodoFragment());
+        fragmentList.add(new TodoFragment(this));
         fragmentList.add(new ClockFragment());
-        fragmentList.add(new TestFragment());
 
         //限制2个
-        myViewPager.setOffscreenPageLimit(3);
+        myViewPager.setOffscreenPageLimit(2);
 
         //构建适配器
         FragmentAdapter myFragmentAdapter = new FragmentAdapter(getSupportFragmentManager(),fragmentList,tab_titles);
@@ -244,22 +206,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onClick(View v){
                         //新建Todo画面
                         //跳转
-                    }
-                });
-            }else if(position == 1){
-                fab.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v){
-                        //新建Clock画面
-                        //跳转
-                    }
-                });
-            }else if(position == 2){
-                fab.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v){
-                        //新建Todo画面
-                        //跳转
                         CircularAnim.fullActivity(MainActivity.this, v)
                                 .colorOrImageRes(R.color.colorPrimary)
                                 .go(new CircularAnim.OnAnimationEndListener() {
@@ -269,6 +215,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                         startActivityForResult(intent,1);
                                     }
                                 });
+                    }
+                });
+            }else if(position == 1){
+                fab.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        //新建Clock画面
+                        //跳转
                     }
                 });
             }
@@ -282,7 +236,23 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab:
+                //跳转动画
+                CircularAnim.fullActivity(MainActivity.this, v)
+                        .colorOrImageRes(R.color.colorPrimary)
+                        .go(new CircularAnim.OnAnimationEndListener() {
+                            @Override
+                            public void onAnimationEnd() {
+                                Intent intent = new Intent(MainActivity.this, NewTodoActivity.class);
+                                startActivityForResult(intent, 1);
+                            }
+                        });
 
+                break;
+            default:
+                break;
+        }
     }
 
     /**

@@ -50,6 +50,9 @@ dependencies {
     //水波动画帮助类
     implementation 'com.github.XunMengWinter:CircularAnim:0.4.6'
 
+    //信息弹出框、好用
+    implementation 'com.github.GrenderG:Toasty:1.5.0'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

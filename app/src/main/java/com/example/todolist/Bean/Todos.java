@@ -20,6 +20,23 @@ public class Todos {
 
     }
 
+    public Todos(String title, String dsc, String date, String time, String dbObjectId,
+                 long remindTime,long remindTimeNoDay, int isAlerted,
+                 int imgId, int isRepeat,int F_tid,int isFinish){
+        this.title = title;
+        this.dsc = dsc;
+        this.date = date;
+        this.time = time;
+        this.dbObjectId = dbObjectId;
+        this.remindTime = remindTime;
+        this.remindTimeNoDay = remindTimeNoDay;
+        this.isAlerted = isAlerted;
+        this.imgId = imgId;
+        this.isRepeat = isRepeat;
+        this.F_tid = F_tid;
+        this.isFinish = isFinish;
+    }
+
     public Todos(String title, String dsc, String date, String time,
                  Long remindTime, int imgId, int isRepeat,int isAlerted){
         this.title = title;
