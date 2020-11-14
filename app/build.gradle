@@ -53,6 +53,15 @@ dependencies {
     //信息弹出框、好用
     implementation 'com.github.GrenderG:Toasty:1.5.0'
 
+    //应用保活，常驻内存
+    implementation 'com.carmelo:keeplive:1.0.0'
+
+    //Layout选中效果
+    implementation 'com.github.jaouan:compoundlayout:1.0.1'
+
+    //自定义Button
+    implementation 'com.lai:buttonStyle:1.0.2'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

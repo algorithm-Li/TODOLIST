@@ -28,23 +28,23 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             "F_tid int," +
             "isFinish int)";
 
-    public static final String CLOCK = "create table Clock(" +
-            "cid INTEGER primary key autoincrement," +
-            "objectId TEXT," +
-            "clocktitle TEXT," +
-            "workLength INT," +
-            "shortBreak INT," +
-            "longBreak INT," +
-            "frequency INT," +
-            "imgID INT)";
+    public static final String CLOCK = "create table Clock ("
+            + "id integer primary key autoincrement,"
+            + "objectId String,"
+            + "clocktitle String,"
+            + "workLength int,"
+            + "shortBreak int,"
+            + "longBreak int,"
+            + "frequency int,"
+            + "imgId int )";
 
-    public static final String TIME = "create table timer_schedule(" +
-            "_id INTEGER primary key autoincrement," +
-            "clocktitle TEXT," +
-            "start_time DATETIME," +
-            "end_time DATETIME," +
-            "duration INTEGER," +
-            "date_add DATE)";
+    public static final String TIME = "create table timer_schedule ("
+            + "_id integer primary key autoincrement,"
+            + "clocktitle String,"
+            + "start_time DATETIME,"
+            + "end_time DATETIME,"
+            + "duration INTEGER,"
+            + "date_add DATE)";
 
     public static final String USER = "create table _User(" +
             "uid INTEGER primary key autoincrement," +

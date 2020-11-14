@@ -54,4 +54,46 @@ public class ToDoUtils {
         return temp;
     }
 
+
+    /**
+     * 获取并返回今天未被提醒切大于当前时间的事项
+     */
+    public static List<Todos> getTodayTodos(Context context){
+        List<Todos> todayTodos = new ArrayList<Todos>();
+        try {
+            List<Todos> findAll = new TodoDao(context).getNotAlertTodos();
+            if (findAll != null && findAll.size()>0){
+                for (Todos todos : findAll){
+                    if (todos.getRemindTime() >= System.currentTimeMillis() && isToday(todos.getRemindTime())){
+                        todayTodos.add(todos);
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return todayTodos;
+    }
+
+    /**
+     * 判断要提醒的事项是否为今天
+     */
+    private static boolean isToday(long date){
+        if (date/1000/60/60/24 == System.currentTimeMillis()/1000/60/60/24){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 将改任务设置为已被提醒
+     */
+    public static void setHasAlerted(Context context, int tid) {
+        TodoDao todoDao = new TodoDao(context);
+        Todos todos = todoDao.getOneTodo(tid);
+        if (todos != null) {
+            todoDao.setisAlerted(tid);
+        }
+    }
+
 }

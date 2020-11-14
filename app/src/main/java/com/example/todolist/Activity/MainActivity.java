@@ -223,6 +223,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onClick(View v){
                         //新建Clock画面
                         //跳转
+                        fab.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                CircularAnim.fullActivity(MainActivity.this, v)
+                                        .go(new CircularAnim.OnAnimationEndListener() {
+                                            @Override
+                                            public void onAnimationEnd() {
+                                                Intent intent = new Intent(MainActivity.this, NewClockActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                            }
+                        });
                     }
                 });
             }

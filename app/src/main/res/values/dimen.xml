@@ -8,4 +8,10 @@
     <!--浮动按钮边界值，参数-->
     <dimen name="fab_margin">16dp</dimen>
 
+    <!--new_clock 边界值 -->
+    <dimen name="preference_header_padding">16dp</dimen>
+    <dimen name="preference_header_spacing">4dp</dimen>
+    <dimen name="preference_item_padding_side">16dp</dimen>
+    <dimen name="preference_item_padding">16dp</dimen>
+
 </resources>

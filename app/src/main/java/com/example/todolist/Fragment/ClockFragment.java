@@ -1,90 +1,131 @@
 package com.example.todolist.Fragment;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.todolist.R;
-import com.sackcentury.shinebuttonlib.ShineButton;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ClockFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.todolist.Activity.ClockActivity;
+import com.example.todolist.Adapter.ClockRecyclerViewAdapter;
+import com.example.todolist.Bean.Tomato;
+import com.example.todolist.R;
+import com.example.todolist.SpacesItemDecoration;
+import com.example.todolist.Utils.ClockItemTouchHelperCallback;
+import com.example.todolist.Utils.RecyclerItemClickListener;
+import com.example.todolist.Utils.SPUtils;
+import com.example.todolist.Utils.TomatoUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ClockFragment extends Fragment {
 
-    ShineButton shineButton_1;
-    ShineButton shineButton_2;
-    ShineButton shineButton_3;
-    ShineButton shineButton_4;
-
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ClockFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ClockFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ClockFragment newInstance(String param1, String param2) {
-        ClockFragment fragment = new ClockFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private Context context;
+    private RecyclerView recyclerView;
+    private ClockRecyclerViewAdapter clockRecyclerViewAdapter;
+    private List<Tomato> clockList = new ArrayList<>();
+    private LinearLayoutManager layout;
+    private List<Tomato> localTomato;
+    private ItemTouchHelper mItemTouchHelper;
+    private ItemTouchHelper.Callback callback;
+    private int workLength, shortBreak,longBreak,frequency;
+    private String clockTitle;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        context = getActivity();//获取上下文
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
         View rootView = inflater.inflate(R.layout.fragment_clock, container, false);
-        shineButton_1 = (ShineButton)rootView.findViewById(R.id.po_image1);
-        shineButton_1.init(getActivity());
+        layout = new LinearLayoutManager(getContext());
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.clock_recycler_view);
+        clockRecyclerViewAdapter = new ClockRecyclerViewAdapter(clockList, getActivity());
+        recyclerView.setLayoutManager(layout);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(0));
+        recyclerView.setAdapter(clockRecyclerViewAdapter);
 
-        shineButton_2 = (ShineButton)rootView.findViewById(R.id.po_image2);
-        shineButton_2.init(getActivity());
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
 
-        shineButton_3 = (ShineButton)rootView.findViewById(R.id.po_image3);
-        shineButton_3.init(getActivity());
+                clockTitle = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getTitle();
+                workLength = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getWorkLength();
+                shortBreak = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getShortBreak();
+                longBreak = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getLongBreak();
+                frequency = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getFrequency();
 
-        shineButton_4 = (ShineButton)rootView.findViewById(R.id.po_image4);
-        shineButton_4.init(getActivity());
+                SPUtils.put(context,"pref_key_work_length", workLength);
+                SPUtils.put(context,"pref_key_short_break", shortBreak);
+                SPUtils.put(context,"pref_key_long_break", longBreak);
+                SPUtils.put(context,"pref_key_long_break_frequency", frequency);
 
+                Intent intent = new Intent(getActivity(), ClockActivity.class);
+                intent.putExtra("clocktitle",clockTitle);
+                intent.putExtra("workLength", workLength);
+                intent.putExtra("shortBreak", shortBreak);
+                intent.putExtra("longBreak", longBreak);
+                startActivity(intent);
+            }
 
+            @Override
+            public void onItemLongClick(View view, final int position) {
 
+            }
+        }));
+
+        callback = new ClockItemTouchHelperCallback(clockRecyclerViewAdapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(recyclerView);
+        setDbData();
         return rootView;
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setDbData();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    @Override
+    public void onResume(){
+        setDbData();
+        clockRecyclerViewAdapter.notifyDataSetChanged();
+        super.onResume();
+
+    }
+
+    private void setDbData(){
+        localTomato = TomatoUtils.getAllTomato(getContext());
+        if (localTomato.size() > 0) {
+            setListData(localTomato);
+        }
+    }
+
+    /**
+     * 设置list数据
+     */
+    private void setListData(List<Tomato> newList) {
+        clockList.clear();
+        clockList.addAll(newList);
+        clockRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
 }

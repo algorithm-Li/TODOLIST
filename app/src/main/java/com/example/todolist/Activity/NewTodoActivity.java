@@ -36,6 +36,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.todolist.Bean.Todos;
 import com.example.todolist.Dao.TodoDao;
 import com.example.todolist.R;
+import com.example.todolist.Service.AlarmService;
 import com.example.todolist.Utils.PermissionPageUtils;
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -268,7 +269,7 @@ public class NewTodoActivity extends BaseActivity {
                         new TodoDao(getApplicationContext()).create(todos);
                     }
                     //后台服务
-                    //startService(new Intent(NewTodoActivity.this, AlarmService.class));
+                    startService(new Intent(NewTodoActivity.this, AlarmService.class));
                     finish();
                     }
                 }
