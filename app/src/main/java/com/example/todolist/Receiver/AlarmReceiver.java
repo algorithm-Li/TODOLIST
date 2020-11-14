@@ -17,6 +17,9 @@ import com.example.todolist.R;
 import com.example.todolist.Service.AlarmService;
 import com.example.todolist.Utils.SPUtils;
 
+/**
+ * 待办事项提醒接收器
+ */
 public class AlarmReceiver extends BroadcastReceiver {
     
     private static final int NOTIFICATION_ID_1 = 0x00113;

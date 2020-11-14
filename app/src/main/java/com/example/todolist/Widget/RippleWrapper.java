@@ -19,6 +19,9 @@ import com.example.todolist.R;
 
 import java.util.ArrayList;
 
+/**
+ * 自写控件 波纹包装机 ，产生波纹效果
+ */
 public class RippleWrapper extends RelativeLayout {
     private boolean mIsRunning;
     private AnimatorSet mAnimatorSet;

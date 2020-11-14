@@ -3,6 +3,9 @@ package com.example.todolist.Utils;
 import android.content.Context;
 import android.os.PowerManager;
 
+/**
+ * 闹钟提醒帮助类
+ */
 public class WakeLockHelper {
     private final String mWakeLockId;
     private PowerManager.WakeLock mWakeLock;

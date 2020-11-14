@@ -13,6 +13,9 @@ import androidx.core.content.ContextCompat;
 
 import com.example.todolist.R;
 
+/**
+ * 自写控件，用来实现Clock的widget
+ */
 public class ClockProgressBar extends View {
     private int mColorArc;
     private int mColorCircle;

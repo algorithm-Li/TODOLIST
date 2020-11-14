@@ -21,16 +21,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!--颜色 #FF6666-->
+
         <com.sackcentury.shinebuttonlib.ShineButton
             android:id="@+id/po_image1"
             android:layout_width="27dp"
             android:layout_height="27dp"
             android:src="@android:color/darker_gray"
             app:btn_color="@android:color/darker_gray"
-            app:btn_fill_color="#FF6666"
+            app:btn_fill_color="@color/colorPrimary"
             app:allow_random_color="false"
             app:enable_flashing="false"
-            app:big_shine_color="#FF6666"
+            app:big_shine_color="@color/colorAccent"
             app:click_animation_duration="200"
             app:shine_animation_duration="1500"
             app:shine_turn_angle="10"

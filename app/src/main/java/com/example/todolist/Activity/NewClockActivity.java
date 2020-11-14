@@ -9,9 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -38,20 +34,14 @@ import com.example.todolist.Widget.ClockApplication;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.lai.library.ButtonStyle;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Random;
 
-import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
 
 /**
  * 新建待办事项类
- * Created by Lulin on 2018/5/5.
  */
 public class NewClockActivity extends BaseActivity {
 
@@ -80,17 +70,6 @@ public class NewClockActivity extends BaseActivity {
     private boolean enableOffline = true;
     private ButtonStyle done;
 
-    private int[] data={
-            0,0,0,0,1,0,0,0,18,19,
-            21,18,9,9,16,20,18,11,17,13,
-            17,12,16,16,20,16,5,1,0,4,
-            16,17,9,16,20,11,6,16,16,11,
-            6,14,16,8,5,13,13,6,2,16,
-            18,12,7,13,15,13,4,1,18,15,
-            7,3,14,13,6,4,12,10,15,12,
-            1,1,15,20,0,3,10,1,8,17};
-    //private VoiceAnimator voiceAnimator;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,7 +82,6 @@ public class NewClockActivity extends BaseActivity {
         dbHelper = new MyDatabaseHelper(NewClockActivity.this, "Data.db", null, 1);
         db = dbHelper.getWritableDatabase();
         initPermission();
-        //initBaiduRecognizer();
         initView();
         initClick();
         initHeadImage();
@@ -114,23 +92,18 @@ public class NewClockActivity extends BaseActivity {
         fab_ok = (FloatingActionButton) findViewById(R.id.fab_clock);
         new_bg = (ImageView) findViewById(R.id.new_clock_bg);
         mic_clock = (Button) findViewById(R.id.mic_clock);
-
     }
 
     private void initHeadImage(){
-
         Random random = new Random();
         imgId = imageArray[random.nextInt(7)];
-
         RequestOptions options = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true);
-
         Glide.with(this)
                 .load(imgId)
                 .apply(options)
                 .into(new_bg);
-
     }
 
     private void initClick() {
@@ -176,10 +149,10 @@ public class NewClockActivity extends BaseActivity {
                         .get(NewClockActivity.this,"pref_key_long_break_frequency", ClockApplication.DEFAULT_LONG_BREAK_FREQUENCY))
                 .build();
 
+        //设置完成
         fab_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 clockTitle = nv_clock_title.getText().toString();
                 workLength = (int) SPUtils
                         .get(NewClockActivity.this, "pref_key_work_length", ClockApplication.DEFAULT_WORK_LENGTH);
@@ -232,43 +205,9 @@ public class NewClockActivity extends BaseActivity {
 
     }
 
-    /*private void showVoiceDialog(){
-        voice = new MaterialDialog(NewClockActivity.this);
-        LayoutInflater layoutInflater = LayoutInflater.from(NewClockActivity.this);
-        View view = layoutInflater.inflate(R.layout.dialog_voice, null);
-        voice_result = view.findViewById(R.id.voice_result);
-        done = view.findViewById(R.id.voice_done);
-        done.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stop();
-            }
-        });
-        voiceAnimator = view.findViewById(R.id.voiceAnimator);
-        voiceAnimator.setAnimationMode(VoiceAnimator.AnimationMode.ANIMATION);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                while(true){
-                    for (int aData : data) {
-                        voiceAnimator.setValue((aData) / 20f);
-                        try {
-                            Thread.sleep(50);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }).start();
-        voice.setContentView(view);
-        voice.show();
-    }*/
-
     /*动态权限申请*/
     private void initPermission() {
-        String permission[] = {Manifest.permission.RECORD_AUDIO,
+        String[] permission = {Manifest.permission.RECORD_AUDIO,
                 Manifest.permission.ACCESS_NETWORK_STATE,
                 Manifest.permission.INTERNET,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -280,7 +219,7 @@ public class NewClockActivity extends BaseActivity {
             }
         }
 
-        String tmpList[] = new String[applyList.size()];
+        String[] tmpList = new String[applyList.size()];
         if (!applyList.isEmpty()) {
             ActivityCompat.requestPermissions(this, applyList.toArray(tmpList), 123);
         }
@@ -295,6 +234,7 @@ public class NewClockActivity extends BaseActivity {
         finish();
     }
 
+    //设置状态栏
     private void setStatusBar(){
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -43,7 +43,8 @@
         <activity android:name=".Activity.NewTodoActivity">
 
         </activity>
-        <activity android:name=".Activity.MainActivity">
+        <activity android:name=".Activity.MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +62,6 @@
             android:name=".Activity.NewClockActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-
         <service android:name=".Service.AlarmService"
             android:process=":live">
             <intent-filter>
@@ -70,6 +70,7 @@
                     />
             </intent-filter>
         </service>
+
         <service
             android:name=".Service.FocusService"
             android:enabled="true"

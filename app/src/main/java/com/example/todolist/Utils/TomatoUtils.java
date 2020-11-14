@@ -10,6 +10,10 @@ import com.example.todolist.Dao.ClockDao;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 锤子时钟工具类
+ * 利用番茄工作法
+ */
 public class TomatoUtils {
 
     /**

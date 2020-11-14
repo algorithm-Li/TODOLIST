@@ -4,6 +4,9 @@ import android.app.Activity;
 
 import java.util.ArrayList;
 
+/**
+ * Activity 收集，单例类
+ */
 public class ActivityCollector {
 
     private static ActivityCollector myActivity = new ActivityCollector();

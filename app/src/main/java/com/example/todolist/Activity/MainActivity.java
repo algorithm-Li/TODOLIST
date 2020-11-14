@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
@@ -218,24 +219,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                 });
             }else if(position == 1){
-                fab.setOnClickListener(new View.OnClickListener(){
+                fab.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v){
+                    public void onClick(View v) {
                         //新建Clock画面
                         //跳转
-                        fab.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                CircularAnim.fullActivity(MainActivity.this, v)
-                                        .go(new CircularAnim.OnAnimationEndListener() {
-                                            @Override
-                                            public void onAnimationEnd() {
-                                                Intent intent = new Intent(MainActivity.this, NewClockActivity.class);
-                                                startActivity(intent);
-                                            }
-                                        });
-                            }
-                        });
+                        CircularAnim.fullActivity(MainActivity.this, v)
+                                .colorOrImageRes(R.drawable.ic_img3)
+                                .go(new CircularAnim.OnAnimationEndListener() {
+                                    @Override
+                                    public void onAnimationEnd() {
+                                        Intent intent = new Intent(MainActivity.this, NewClockActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
                     }
                 });
             }

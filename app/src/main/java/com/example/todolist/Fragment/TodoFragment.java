@@ -147,7 +147,7 @@ public class TodoFragment extends Fragment {
                                 Intent intent = new Intent(context,NewTodoActivity.class);
                                 intent.putExtra("isEdit",true);
                                 intent.putExtra("tid",todosList.get(size-1-pos).getTid());
-                                startActivityForResult(intent,2);
+                                startActivityForResult(intent,1);
                                 break;
                             default:
                                 break;

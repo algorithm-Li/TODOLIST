@@ -46,6 +46,7 @@ public class ClockFragment extends Fragment {
         context = getActivity();//获取上下文
     }
 
+    //初始化
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,22 +58,26 @@ public class ClockFragment extends Fragment {
         recyclerView.addItemDecoration(new SpacesItemDecoration(0));
         recyclerView.setAdapter(clockRecyclerViewAdapter);
 
+        //Recyclerview 上 item的点击事件
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
 
+                //加载数据
                 clockTitle = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getTitle();
                 workLength = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getWorkLength();
                 shortBreak = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getShortBreak();
                 longBreak = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getLongBreak();
                 frequency = clockList.get(clockRecyclerViewAdapter.getItemCount()-1-position).getFrequency();
 
+                //保存数据
                 SPUtils.put(context,"pref_key_work_length", workLength);
                 SPUtils.put(context,"pref_key_short_break", shortBreak);
                 SPUtils.put(context,"pref_key_long_break", longBreak);
                 SPUtils.put(context,"pref_key_long_break_frequency", frequency);
 
-                Intent intent = new Intent(getActivity(), ClockActivity.class);
+                //跳转
+                Intent intent = new Intent(getActivity(), ClockActivity.class);//跳转到ClockActivity
                 intent.putExtra("clocktitle",clockTitle);
                 intent.putExtra("workLength", workLength);
                 intent.putExtra("shortBreak", shortBreak);
@@ -80,19 +85,22 @@ public class ClockFragment extends Fragment {
                 startActivity(intent);
             }
 
+            //长按事件
             @Override
             public void onItemLongClick(View view, final int position) {
 
             }
         }));
 
+        //滑动回调监听事件
         callback = new ClockItemTouchHelperCallback(clockRecyclerViewAdapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(recyclerView);
-        setDbData();
+        setDbData();//读取数据
         return rootView;
     }
 
+    //数据初始化
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -109,7 +117,6 @@ public class ClockFragment extends Fragment {
         setDbData();
         clockRecyclerViewAdapter.notifyDataSetChanged();
         super.onResume();
-
     }
 
     private void setDbData(){

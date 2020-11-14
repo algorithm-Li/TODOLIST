@@ -30,7 +30,7 @@ import java.util.Objects;
 import me.drakeet.materialdialog.MaterialDialog;
 
 /**
- * RecyclerView适配器
+ * RecyclerView适配器 -- 适配 ClockFragment页面
  */
 public class ClockRecyclerViewAdapter extends RecyclerView.Adapter<ClockRecyclerViewAdapter.ViewHolder>
         implements ItemTouchHelperAdapter {
@@ -41,7 +41,7 @@ public class ClockRecyclerViewAdapter extends RecyclerView.Adapter<ClockRecycler
     private int truePosition,itemPosition;
     private MyDatabaseHelper dbHelper;
 
-
+    //初始化
     public ClockRecyclerViewAdapter(List<Tomato> tomato, Context context) {
         this.tomatoList = tomato;
         this.context=context;
@@ -51,6 +51,7 @@ public class ClockRecyclerViewAdapter extends RecyclerView.Adapter<ClockRecycler
     //自定义ViewHolder类
     static class ViewHolder extends RecyclerView.ViewHolder{
 
+        //item_clock变量
         TextView clock_title;
         TextView work_time;
         ImageView clock_card_bg;
@@ -64,17 +65,21 @@ public class ClockRecyclerViewAdapter extends RecyclerView.Adapter<ClockRecycler
         }
     }
 
+    //初始化
     @NonNull
     @Override
     public ClockRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        //加载item布局文件-->item_clock
         View v= LayoutInflater.from(context).inflate(R.layout.item_clock,viewGroup,false);
         ViewHolder viewHolder=new ViewHolder(v);
         return viewHolder;
     }
 
+    //每个item绑定ViewHolder
     @Override
     public void onBindViewHolder(ClockRecyclerViewAdapter.ViewHolder ViewHolder, int i) {
 
+        //图片优化加载内存
         RequestOptions options2 =new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true)
@@ -87,11 +92,13 @@ public class ClockRecyclerViewAdapter extends RecyclerView.Adapter<ClockRecycler
 
     }
 
+    //获取item数量
     @Override
     public int getItemCount() {
         return tomatoList.size();
     }
 
+    //item删除事件，删去item，更新Recyclerview的item变量数据
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(tomatoList, fromPosition, toPosition);
@@ -100,14 +107,15 @@ public class ClockRecyclerViewAdapter extends RecyclerView.Adapter<ClockRecycler
         return true;
     }
 
+    //滑动删除，弹窗选择是否删除
     public void removeItem(int position){
-        truePosition = tomatoList.size()-1-position;
-        itemPosition = position;
+        truePosition = tomatoList.size()-1-position; //数据的真实位置
+        itemPosition = position; // Recyclerview item 的位置
         popAlertDialog();
     }
 
+    //弹窗、用户选择是否删除
     private void popAlertDialog() {
-
         if (dialog == null) {
             dialog = new MaterialDialog(context);
             dialog.setMessage("确定删除？")
@@ -119,8 +127,9 @@ public class ClockRecyclerViewAdapter extends RecyclerView.Adapter<ClockRecycler
                             dbHelper = new MyDatabaseHelper(context, "Data.db", null, 1);
                             SQLiteDatabase db = dbHelper.getWritableDatabase();
                             db.delete("Clock","clocktitle = ?",
-                                    new String[]{clockTitle});
-
+                                    new String[]{clockTitle}); //删除模式
+                            //删除相应tomatoList的位置
+                            //更新Recyclerview
                             tomatoList.remove(truePosition);
                             notifyItemRemoved(itemPosition);
                             notifyItemRangeChanged(itemPosition,tomatoList.size());

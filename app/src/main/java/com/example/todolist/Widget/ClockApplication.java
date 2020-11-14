@@ -9,6 +9,9 @@ import com.example.todolist.Utils.SPUtils;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Application 单例类 ，保存相应数据，不同场景，当前状态的 数据和默认数据
+ */
 public class ClockApplication extends Application {
     public static final int DEFAULT_WORK_LENGTH = 25;
     public static final int DEFAULT_SHORT_BREAK = 5;

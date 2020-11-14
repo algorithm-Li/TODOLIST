@@ -5,8 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.todolist.Activity.ActivityCollector;
-
+/**
+ * 基类，用来测试Activity创建销毁状态
+ */
 public class BaseActivity extends AppCompatActivity {
 
     @Override

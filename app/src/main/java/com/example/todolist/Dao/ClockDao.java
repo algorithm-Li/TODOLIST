@@ -35,19 +35,23 @@ public class ClockDao {
     private int allTimes = 0;
     private int allDuration = 0;
 
+    //初始化
     public ClockDao(Context context) {
         mDbHelper = new MyDatabaseHelper(context,"Data.db", null, 1);
     }
 
+    //打开数据库
     public ClockDao open() {
         db = mDbHelper.getWritableDatabase();
         return this;
     }
 
+    //关闭数据库
     public void close() {
         mDbHelper.close();
     }
 
+    //插入操作，
     public long insert(Date startTime, long duration, String title) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_START_TIME, formatDateTime(startTime));
@@ -57,6 +61,7 @@ public class ClockDao {
         return db.insert(TABLE_NAME, null, values);
     }
 
+    //更新操作
     public boolean update(long id) {
         ContentValues values = new ContentValues();
         values.put(COLUMN_NAME_END_TIME, formatDateTime(new Date()));
@@ -70,45 +75,9 @@ public class ClockDao {
         return count > 0;
     }
 
+    //删除操作
     public void delete(long id) {
         db.delete(TABLE_NAME, _ID + " = ?", new String[] {String.valueOf(id)});
-    }
-
-    public HashMap getToday() {
-        HashMap<String, Integer> results = new HashMap<>();
-        String[] projection = {
-                _ID,
-                COLUMN_NAME_END_TIME,
-                COLUMN_NAME_DURATION
-        };
-
-        String selection = COLUMN_NAME_DATE_ADD + " = ?";
-        String[] selectionArgs = { formatDate(new Date()) };
-
-        Cursor cursor = db.query(
-                TABLE_NAME,                     // The table to query
-                projection,                       // The columns to return
-                selection,                        // The columns for the WHERE clause
-                selectionArgs,                    // The values for the WHERE clause
-                null,                            // don't group the rows
-                null,                            // don't filter by row groups
-                null                             // don't sort order
-        );
-        int duration = 0;
-        int times = 0;
-        try {
-            while (cursor.moveToNext()) {
-                if (!cursor.isNull(cursor.getColumnIndex(COLUMN_NAME_END_TIME))) {
-                    times++;
-                    duration += cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_DURATION));
-                }
-            }
-        } finally {
-            cursor.close();
-        }
-        results.put("times", times);
-        results.put("duration", duration);
-        return results;
     }
 
     /**
@@ -127,7 +96,6 @@ public class ClockDao {
      * @return
      */
     public long create(Tomato tomato) {
-
         open();
         ContentValues values = new ContentValues();
         values.put("clocktitle", tomato.getTitle());
@@ -140,8 +108,6 @@ public class ClockDao {
         close();
         return id;
     }
-
-
 
     public List<Tomato> getDbAllTomato() {
         open();
@@ -157,23 +123,11 @@ public class ClockDao {
             data.setImgId(cursor.getInt(cursor.getColumnIndex("imgId")));
             tomatoList.add(data);
         }
-        // make sure to close the cursor
-
         cursor.close();
         close();
         Log.i("ClockDao", "查询到本地的番茄任务个数：" + tomatoList.size());
         return tomatoList;
     }
-
-    /*
-    public HashMap getAmount() {
-        HashMap<String, Integer> results = new HashMap<>();
-
-        results.put("times", allTimes);
-        results.put("duration", allDuration);
-
-        return results;
-    }*/
 
     /**
      * 清空表数据
@@ -185,6 +139,7 @@ public class ClockDao {
         close();
     }
 
+    //格式化
     public static String formatDateTime(Date date) {
         return formatDateTime.format(date);
     }

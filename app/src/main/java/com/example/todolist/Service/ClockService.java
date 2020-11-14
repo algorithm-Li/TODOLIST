@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.example.todolist.Activity.ClockActivity;
 import com.example.todolist.Bean.Clock;
@@ -35,23 +34,19 @@ import java.util.concurrent.TimeUnit;
 
 
 public class ClockService extends Service implements CountDownTimer.OnCountDownTickListener {
-    public static final String ACTION_COUNTDOWN_TIMER =
-            "com.example.lulin.todolist.COUNTDOWN_TIMER";
-    public static final String ACTION_START = "com.example.lulin.todolist.ACTION_START";
-    public static final String ACTION_PAUSE = "com.example.lulin.todolist.ACTION_PAUSE";
-    public static final String ACTION_RESUME = "com.example.lulin.todolist.ACTION_RESUME";
-    public static final String ACTION_STOP = "com.example.lulin.todolist.ACTION_STOP";
-    public static final String ACTION_TICK = "com.example.lulin.todolist.ACTION_TICK";
-    public static final String ACTION_FINISH = "com.example.lulin.todolist.ACTION_FINISH";
-    public static final String ACTION_AUTO_START
-            = "com.example.lulin.todolist.ACTION_AUTO_START";
-    public static final String ACTION_TICK_SOUND_ON =
-            "com.example.lulin.todolist.ACTION_TICK_SOUND_ON";
-    public static final String ACTION_TICK_SOUND_OFF =
-            "com.example.lulin.todolist.ACTION_TICK_SOUND_OFF";
-    public static final String ACTION_POMODORO_MODE_ON =
-            "com.example.lulin.todolist.ACTION_POMODORO_MODE_OFF";
-    public static final String ACTION_CHANGE_MUSIC = "com.example.lulin.todolist.ACTION_CHANGE_MUSIC";
+
+    public static final String ACTION_COUNTDOWN_TIMER = "com.example.todolist.COUNTDOWN_TIMER";
+    public static final String ACTION_START = "com.example.todolist.ACTION_START";
+    public static final String ACTION_PAUSE = "com.example.todolist.ACTION_PAUSE";
+    public static final String ACTION_RESUME = "com.example.todolist.ACTION_RESUME";
+    public static final String ACTION_STOP = "com.example.todolist.ACTION_STOP";
+    public static final String ACTION_TICK = "com.example.todolist.ACTION_TICK";
+    public static final String ACTION_FINISH = "com.example.todolist.ACTION_FINISH";
+    public static final String ACTION_AUTO_START = "com.example.todolist.ACTION_AUTO_START";
+    public static final String ACTION_TICK_SOUND_ON = "com.example.todolist.ACTION_TICK_SOUND_ON";
+    public static final String ACTION_TICK_SOUND_OFF = "com.example.todolist.ACTION_TICK_SOUND_OFF";
+    public static final String ACTION_POMODORO_MODE_ON = "com.example.todolist.ACTION_POMODORO_MODE_OFF";
+    public static final String ACTION_CHANGE_MUSIC = "com.example.todolist.ACTION_CHANGE_MUSIC";
 
     public static final String MILLIS_UNTIL_FINISHED = "MILLIS_UNTIL_FINISHED";
     public static final String REQUEST_ACTION = "REQUEST_ACTION";
@@ -164,7 +159,6 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
                         getNotificationManager().notify(NOTIFICATION_ID, getNotification(
                                 getNotificationTitle(), text).build());
                     }
-
                     mSound.pause();
                     break;
                 case ACTION_RESUME:
@@ -206,7 +200,6 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
                     break;
             }
         }
-
         return START_STICKY;
     }
 
@@ -214,13 +207,11 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
         if (isNotificationOn()) {
             cancelNotification();
         }
-
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
             stopForeground(true);
         }
-
         mWakeLockHelper.release();
     }
 
@@ -232,15 +223,12 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
     @Override
     public void onCountDownTick(long millisUntilFinished) {
         mApplication.setMillisUntilFinished(millisUntilFinished);
-
         Intent intent = new Intent(ACTION_COUNTDOWN_TIMER);
         intent.putExtra(MILLIS_UNTIL_FINISHED, millisUntilFinished);
         intent.putExtra(REQUEST_ACTION, ACTION_TICK);
         sendBroadcast(intent);
-
         Notification.Builder builder =
                 getNotification(getNotificationTitle(), formatTime(millisUntilFinished));
-
         getNotificationManager().notify(NOTIFICATION_ID, builder.build());
     }
 
@@ -249,27 +237,22 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
         Intent intent = new Intent(ACTION_COUNTDOWN_TIMER);
         intent.putExtra(REQUEST_ACTION, ACTION_FINISH);
         sendBroadcast(intent);
-
         Notification.Builder builder;
-
         if (mApplication.getScene() == ClockApplication.SCENE_WORK) {
             builder = getNotification(
                     getResources().getString(R.string.notification_finish),
                     getResources().getString(R.string.notification_finish_content)
             );
-
             if (mID > 0) {
                 // 更新数据
                 mDBAdapter.open();
                 boolean success = mDBAdapter.update(mID);
                 mDBAdapter.close();
                 clock.setEnd_time(ClockDao.formatDateTime(new Date()));
-
                 if (success) {
                     long amountDurations =
                             PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                             .getLong("pref_key_amount_durations", 0);
-
                     SharedPreferences.Editor editor =
                             PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                                     .edit();
@@ -284,12 +267,9 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
                     getResources().getString(R.string.notification_break_finish_content)
             );
         }
-
         if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                 .getBoolean("pref_key_use_notification", true)) {
-
             int defaults = Notification.DEFAULT_LIGHTS;
-
             if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                     .getBoolean("pref_key_notification_sound", true)) {
                 // 结束提示音
@@ -298,21 +278,16 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
                                 (mApplication.getScene() == ClockApplication.SCENE_WORK ?
                                         R.raw.workend :
                                         R.raw.breakend));
-
                 builder.setSound(uri);
             }
-
             if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
                     .getBoolean("pref_key_notification_vibrate", true)) {
                 defaults |= Notification.DEFAULT_VIBRATE;
                 builder.setVibrate(new long[] {0, 1000});
             }
-
             builder.setDefaults(defaults);
         }
-
         builder.setLights(Color.GREEN, 1000, 1000);
-
         getNotificationManager().notify(NOTIFICATION_ID, builder.build());
 
         mApplication.finish();
@@ -382,16 +357,13 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
             notificationChannel.setSound(null,null);
             builder.setChannelId(CHANNEL_ONE_ID);
         }
-
         return builder;
-
     }
 
     private String getNotificationTitle() {
         int scene = mApplication.getScene();
         int state = mApplication.getState();
         String title;
-
         switch (scene) {
             case ClockApplication.SCENE_WORK:
                 if (state == ClockApplication.STATE_PAUSE) {
@@ -408,7 +380,6 @@ public class ClockService extends Service implements CountDownTimer.OnCountDownT
                 }
                 break;
         }
-
         return title;
     }
 

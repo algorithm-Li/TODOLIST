@@ -19,6 +19,9 @@ import com.example.todolist.Utils.ToDoUtils;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * 提醒后台服务
+ */
 public class AlarmService extends KeepliveService {
 
     private AlarmManager alarmManager;
@@ -76,7 +79,6 @@ public class AlarmService extends KeepliveService {
             }
         }
 
-        // return START_REDELIVER_INTENT;
         return super.onStartCommand(intent,flags,startId);
     }
 
@@ -84,8 +86,6 @@ public class AlarmService extends KeepliveService {
     public void onDestroy() {
         super.onDestroy();
     }
-
-
 
 }
 

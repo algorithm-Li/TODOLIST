@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.todolist.Interface.ItemTouchHelperAdapter;
 import com.example.todolist.Interface.ItemTouchHelperViewHolder;
 
+/**
+ * Todo_item滑动点击回调事件
+ */
 public class TodoItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     public static final float ALPHA_FULL = 1.0f;

@@ -11,7 +11,7 @@ import com.example.todolist.Interface.ItemTouchHelperAdapter;
 import com.example.todolist.Interface.ItemTouchHelperViewHolder;
 
 /**
- *
+ *闹钟滑动点击回调
  */
 public class ClockItemTouchHelperCallback extends ItemTouchHelper.Callback {
 

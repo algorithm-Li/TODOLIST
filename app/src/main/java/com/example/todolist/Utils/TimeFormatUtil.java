@@ -4,6 +4,9 @@ import android.text.format.DateUtils;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 时间格式化工具
+ */
 public class TimeFormatUtil {
     public static String formatTime(long millis) {
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);

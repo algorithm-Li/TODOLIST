@@ -97,10 +97,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
-        Log.d("TTTT","onItemMove");
-        Log.d("TTTT","fromPosition" + fromPosition);
-        Log.d("TTTT","toPosition" + toPosition);
-
         Collections.swap(todosList, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
         notifyItemRangeChanged(fromPosition,toPosition);
@@ -109,12 +105,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
 
     @Override
     public void removeItem(int position) {
-        Log.d("TTTT","removeItem");
         truePosition = todosList.size()-1-position;  //数据的真正位置
         itemPosition = position;    //用户选择删除的位置
-
-        Log.d("TTTT","truePosition" + truePosition);
-        Log.d("TTTT","itemPosition" + itemPosition);
         popAlertDialog();
 
     }
@@ -306,8 +298,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                 });
             }
 
-            add_task.setOnClickListener(this);
-
             //子任务 Recyclerview 适配器
             taskAdapter = new TaskAdapter(myContext,taskTodos,bean.getTid(),percent);
             //获得布局管理器
@@ -316,16 +306,12 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
             task_rvl.setLayoutManager(layoutManager);
             //加载适配器
             task_rvl.setAdapter(taskAdapter);
-        }
 
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.mTopLayout:
-                    Log.d("xxxxxx","点击");
-                    keepOne.toggle(mHolder, mRight);//点击下拉和上回
-                    break;
-                case R.id.add_task:
+            //add_task.setOnClickListener(this);
+
+            add_task.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     final EditText inputServer = new EditText(myContext);
                     AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
                     builder.setTitle("输入子任务").setIcon(R.drawable.task_1).setView(inputServer)
@@ -349,11 +335,74 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                                         insertTodo.setTid((int)tid);
                                         taskTodos.add(insertTodo);
                                         taskAdapter.notifyDataSetChanged();
+                                        if(bean.getIsFinish() == 1){
+                                            percent.setText("完成度：100%");
+                                        }else {
+                                            if (taskTodos.size() == 0) {
+                                                percent.setText("完成度：0%");
+                                            }else {
+                                                double finish = 0;
+                                                for (Todos x : taskTodos) {
+                                                    if (x.getIsFinish() == 1) {
+                                                        finish += 1;
+                                                    }
+                                                }
+                                                if(finish == 0){
+                                                    percent.setText("完成度：0%");
+                                                }else if(finish == taskTodos.size()){
+                                                    percent.setText("完成度：100%");
+                                                }else{
+                                                    DecimalFormat df = new DecimalFormat("#.00");
+                                                    Log.d("number",df.format((finish/taskTodos.size())*100)+ "%");
+                                                    percent.setText("完成度:" + df.format((finish/taskTodos.size())*100)+ "%");
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             });
                     builder.show();
+                }
+            });
+            
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.mTopLayout:
+                    Log.d("xxxxxx","点击");
+                    keepOne.toggle(mHolder, mRight);//点击下拉和上回
                     break;
+//                case R.id.add_task:
+//                    final EditText inputServer = new EditText(myContext);
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(myContext);
+//                    builder.setTitle("输入子任务").setIcon(R.drawable.task_1).setView(inputServer)
+//                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.dismiss();
+//                                }
+//                            })
+//                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    String text = inputServer.getText().toString();
+//                                    if(text.equals("")){
+//                                        Log.d("insertTTTT","插入失败");
+//                                    }else{
+//                                        Todos insertTodo = new Todos();
+//                                        insertTodo.setDsc(text);
+//                                        insertTodo.setF_tid(F_tid);
+//                                        insertTodo.setIsFinish(0);
+//                                        long tid = new TodoDao(myContext).create(insertTodo);
+//                                        insertTodo.setTid((int)tid);
+//                                        taskTodos.add(insertTodo);
+//                                        taskAdapter.notifyDataSetChanged();
+//                                    }
+//                                }
+//                            });
+//                    builder.show();
+//                    break;
                 default:
                     break;
             }

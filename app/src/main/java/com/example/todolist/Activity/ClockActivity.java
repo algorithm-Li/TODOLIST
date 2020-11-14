@@ -46,6 +46,8 @@ import me.drakeet.materialdialog.MaterialDialog;
 
 public class ClockActivity extends BaseActivity {
 
+    //成员变量
+    //布局文件里的变量
     private ClockApplication mApplication;
     private MenuItem mMenuItemIDLE;
     private Button mBtnStart;
@@ -63,31 +65,46 @@ public class ClockActivity extends BaseActivity {
     private static final String KEY_FOCUS = "focus";
     private ImageView clock_bg;
     private ImageButton bt_music;
-    private static int[] imageArray = new int[]{R.drawable.ic_img2,
-                                                R.drawable.ic_img3,
-                                                R.drawable.ic_img4,
-                                                R.drawable.ic_img5,
-                                                R.drawable.ic_img6,
-                                                R.drawable.ic_img7,
-                                                R.drawable.ic_img8,
-                                                R.drawable.ic_img9,
-                                                R.drawable.ic_img10,
-                                                R.drawable.ic_img11,
-                                                R.drawable.ic_img12};
+    private static int[] imageArray = new int[]{
+            R.drawable.ic_img2,
+            R.drawable.ic_img3,
+            R.drawable.ic_img4,
+            R.drawable.ic_img5,
+            R.drawable.ic_img6,
+            R.drawable.ic_img7,
+            R.drawable.ic_img8,
+            R.drawable.ic_img9,
+            R.drawable.ic_img10,
+            R.drawable.ic_img11,
+            R.drawable.ic_img12
+    };
     private int bg_id;
     private int workLength, shortBreak,longBreak;
     private long id;
     private RadioLayout river,rain,wave,bird,fire;
 
+    /**
+     * 新建跳转到MainActivity 的 intent
+     * @param context
+     * @return
+     */
     public static Intent newIntent(Context context) {
         return new Intent(context, MainActivity.class);
     }
 
+    /**
+     * ClockActivity 创建调用的 onCreate函数
+     * 用来初始化
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //初始化状态栏
         setStatusBar();
+        //加载布局文件
         setContentView(R.layout.activity_clock);
+        //获取用户点击事件传过来的 intent, intent里保存着参数，用getXXXXXExtra来获取数据
         Intent intent = getIntent();
         clockTitle = intent.getStringExtra("clocktitle");
         workLength = intent.getIntExtra("workLength",ClockApplication.DEFAULT_WORK_LENGTH);
@@ -95,8 +112,13 @@ public class ClockActivity extends BaseActivity {
         longBreak = intent.getIntExtra("longBreak",ClockApplication.DEFAULT_LONG_BREAK);
         id = intent.getLongExtra("id",1);
 
+        //获取Application实例
+        //Application和Activity,Service一样,是android框架的一个系统组件
+        //Application可以说是单例 (singleton)模式的一个类.且application对象的生命周期是整个程序中最长的，
+        //它的生命周期就等于这个程序的生命周期
         mApplication = (ClockApplication)getApplication();
 
+        //获取其他变量实例
         mBtnStart = (Button)findViewById(R.id.btn_start);
         mBtnPause = (Button)findViewById(R.id.btn_pause);
         mBtnResume = (Button)findViewById(R.id.btn_resume);
@@ -109,6 +131,7 @@ public class ClockActivity extends BaseActivity {
         focus_tint = (TextView)findViewById(R.id.focus_hint);
         bt_music = (ImageButton) findViewById(R.id.bt_music);
         clock_bg = (ImageView) findViewById(R.id.clock_bg);
+        //判断是否开启白噪音
         if(isSoundOn()){
             bt_music.setEnabled(true);
             bt_music.setImageDrawable(getResources().getDrawable(R.drawable.ic_music));
@@ -116,12 +139,17 @@ public class ClockActivity extends BaseActivity {
             bt_music.setEnabled(false);
             bt_music.setImageDrawable(getResources().getDrawable(R.drawable.ic_music_off));
         }
+        //放置默认的白噪音 模式
         SPUtils.put(this,"music_id",R.raw.river);
+        //提示用户如何开启关闭白噪音
         Toasty.normal(this, "双击界面打开或关闭白噪音", Toast.LENGTH_SHORT).show();
+        //初始化监听事件
         initActions();
+        //随机改变背景图片
         initBackgroundImage();
     }
 
+    //初始化背景图片，产生随机数来随机获取
     private void initBackgroundImage(){
         Random random = new Random();
         bg_id = imageArray[random.nextInt(11)];
@@ -129,14 +157,18 @@ public class ClockActivity extends BaseActivity {
         RequestOptions options = new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .skipMemoryCache(true);
+        //使用Glide来加载，优化内存
         Glide.with(getApplicationContext())
                 .load(bg_id)
                 .apply(options)
                 .into(clock_bg);
-
     }
 
+    /**
+     * 初始化 控件的监听事件
+     */
     private void initActions() {
+        //开始按钮的监听事件
         mBtnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,7 +179,7 @@ public class ClockActivity extends BaseActivity {
                 i.putExtra("workLength",workLength);
                 i.putExtra("shortBreak",shortBreak);
                 i.putExtra("longBreak",longBreak);
-                startService(i);
+                startService(i);//开启服务
                 mApplication.start();
                 updateButtons();
                 updateTitle();
@@ -159,6 +191,7 @@ public class ClockActivity extends BaseActivity {
             }
         });
 
+        //暂停
         mBtnPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -173,6 +206,7 @@ public class ClockActivity extends BaseActivity {
             }
         });
 
+        //中断后继续
         mBtnResume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,6 +220,7 @@ public class ClockActivity extends BaseActivity {
             }
         });
 
+        //停止
         mBtnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -196,7 +231,7 @@ public class ClockActivity extends BaseActivity {
                             @Override
                             public void onClick(View view) {
                                 Intent intent2 = new Intent(ClockActivity.this, MainActivity.class);
-                                startActivity(intent2);
+                                startActivity(intent2); //跳转到MainActivity页面
                                 stopService(new Intent(ClockActivity.this, FocusService.class));
                                 Glide.get(ClockActivity.this).clearMemory();
                                 exitApp();
@@ -209,10 +244,10 @@ public class ClockActivity extends BaseActivity {
                         });
 
                 exitDialog.show();
-
             }
         });
 
+        //跳过按钮
         mBtnSkip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -225,6 +260,7 @@ public class ClockActivity extends BaseActivity {
             }
         });
 
+        //点击开关白噪音
         mRippleWrapper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -234,10 +270,8 @@ public class ClockActivity extends BaseActivity {
                     // 修改 SharedPreferences
                     SharedPreferences.Editor editor = PreferenceManager
                             .getDefaultSharedPreferences(getApplicationContext()).edit();
-
                     if (isSoundOn()) {
                         editor.putBoolean("pref_key_tick_sound", false);
-
                         Intent i = ClockService.newIntent(getApplicationContext());
                         i.setAction(ClockService.ACTION_TICK_SOUND_OFF);
                         startService(i);
@@ -261,14 +295,13 @@ public class ClockActivity extends BaseActivity {
                     } catch (AbstractMethodError unused) {
                         editor.commit();
                     }
-
                     updateRipple();
                 }
-
                 mLastClickTime = clickTime;
             }
         });
 
+        //选择白噪音
         bt_music.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -279,6 +312,7 @@ public class ClockActivity extends BaseActivity {
                 wave = musicView.findViewById(R.id.sound_wave);
                 bird = musicView.findViewById(R.id.sound_bird);
                 fire = musicView.findViewById(R.id.sound_fire);
+                //流水
                 river.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -288,6 +322,7 @@ public class ClockActivity extends BaseActivity {
                         startService(i);
                     }
                 });
+                //雷雨
                 rain.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -297,6 +332,7 @@ public class ClockActivity extends BaseActivity {
                         startService(i);
                     }
                 });
+                //海浪
                 wave.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -306,6 +342,7 @@ public class ClockActivity extends BaseActivity {
                         startService(i);
                     }
                 });
+                //鸟叫
                 bird.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -315,6 +352,7 @@ public class ClockActivity extends BaseActivity {
                         startService(i);
                     }
                 });
+                //火焰
                 fire.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -334,30 +372,14 @@ public class ClockActivity extends BaseActivity {
                 alert.setContentView(musicView);
                 alert.setCanceledOnTouchOutside(true);
                 alert.show();
-
             }
-
         });
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//
-//    }
-
+    //按住返回键 退出
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if(keyCode==KeyEvent.KEYCODE_BACK&&event.getAction()==KeyEvent.ACTION_DOWN){
-//            Snackbar.make(layout, "是否删除？（滑动取消）", Snackbar.LENGTH_LONG)
-//                    .setAction("确定", new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View view) {
-//                            Intent intent = new Intent(getApplication(), MainActivity.class);
-//                            startActivity(intent);
-//                            exitApp();
-//                        }
-//                    }).show();
             final MaterialDialog exitDialog = new MaterialDialog(this);
             exitDialog.setTitle("提示")
                     .setMessage("本次番茄钟将作废，是否退出")
@@ -365,9 +387,9 @@ public class ClockActivity extends BaseActivity {
                         @Override
                         public void onClick(View view) {
                             Intent intent2 = new Intent(ClockActivity.this, MainActivity.class);
-                            startActivity(intent2);
+                            startActivity(intent2); //退回MainActivity页面
                             stopService(new Intent(ClockActivity.this, FocusService.class));
-                            Glide.get(ClockActivity.this).clearMemory();
+                            Glide.get(ClockActivity.this).clearMemory(); //优化内存
                             exitApp();
                         }
                     })
@@ -376,7 +398,6 @@ public class ClockActivity extends BaseActivity {
                             exitDialog.dismiss();
                         }
                     });
-
             exitDialog.show();
         }
         return super.onKeyDown(keyCode, event);
@@ -386,7 +407,7 @@ public class ClockActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        reload();
+        reload();//重载
     }
 
     @Override
@@ -408,27 +429,25 @@ public class ClockActivity extends BaseActivity {
         super.onDestroy();
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         releaseImageViewResouce(clock_bg);
-
     }
 
     private void reload() {
         mApplication.reload();
-
         mProgressBar.setMaxProgress(mApplication.getMillisInTotal() / 1000);
         mProgressBar.setProgress(mApplication.getMillisUntilFinished() / 1000);
-
         updateText(mApplication.getMillisUntilFinished());
         updateTitle();
         updateButtons();
         updateScene();
         updateRipple();
         updateAmount();
-
         if (getSharedPreferences().getBoolean("pref_key_screen_on", false)) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 
+    //实时更新
+    //updateText 、updateTitle、updateButtons、updateScene、updateRipple、updateAmount
     private void updateText(long millisUntilFinished) {
         mTextCountDown.setText(TimeFormatUtil.formatTime(millisUntilFinished));
     }
@@ -501,13 +520,6 @@ public class ClockActivity extends BaseActivity {
     public void updateScene() {
         int scene = mApplication.getScene();
 
-//        int workLength = getSharedPreferences()
-//                .getInt("pref_key_work_length", ClockApplication.DEFAULT_WORK_LENGTH);
-//        int shortBreak = getSharedPreferences()
-//                .getInt("pref_key_short_break", ClockApplication.DEFAULT_SHORT_BREAK);
-//        int longBreak = getSharedPreferences()
-//                .getInt("pref_key_long_break", ClockApplication.DEFAULT_LONG_BREAK);
-
         ((TextView)findViewById(R.id.stage_work_value))
                 .setText(getResources().getString(R.string.stage_time_unit, workLength));
         ((TextView)findViewById(R.id.stage_short_break_value))
@@ -525,14 +537,12 @@ public class ClockActivity extends BaseActivity {
 
     private void updateRipple() {
         boolean isPlayOn = getSharedPreferences().getBoolean("pref_key_tick_sound", true);
-
         if (isPlayOn) {
             if (mApplication.getState() == ClockApplication.STATE_RUNNING) {
                 mRippleWrapper.start();
                 return;
             }
         }
-
         mRippleWrapper.stop();
     }
 
@@ -542,6 +552,7 @@ public class ClockActivity extends BaseActivity {
         textView.setText(getResources().getString(R.string.amount_durations, amount));
     }
 
+    //广播监听
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -564,6 +575,7 @@ public class ClockActivity extends BaseActivity {
         }
     };
 
+    //获取存储实例
     private SharedPreferences getSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(this);
     }
@@ -574,6 +586,7 @@ public class ClockActivity extends BaseActivity {
         finish();
     }
 
+    //设置状态栏
     private void setStatusBar(){
         getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -591,11 +604,8 @@ public class ClockActivity extends BaseActivity {
 
     //判断是否开启专注模式
     private boolean getIsFocus(Context context){
-
         Boolean isFocus = (Boolean) SPUtils.get(context, KEY_FOCUS, false);
-
         return isFocus;
-
     }
 
     //判断是否开启白噪音
