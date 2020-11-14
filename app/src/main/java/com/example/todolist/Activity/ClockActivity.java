@@ -1,6 +1,5 @@
 package com.example.todolist.Activity;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -39,6 +39,7 @@ import com.example.todolist.Widget.RippleWrapper;
 import com.google.android.material.snackbar.Snackbar;
 import com.jaouan.compoundlayout.RadioLayout;
 
+import java.util.Objects;
 import java.util.Random;
 
 import es.dmoral.toasty.Toasty;
@@ -78,10 +79,28 @@ public class ClockActivity extends BaseActivity {
             R.drawable.ic_img11,
             R.drawable.ic_img12
     };
+
+    private static int[] hammerImageArray = new int[]{
+            R.drawable.hammer_1,
+            R.drawable.hammer_2,
+            R.drawable.hammer_3,
+            R.drawable.hammer_4,
+            R.drawable.hammer_5,
+            R.drawable.hammer_6,
+            R.drawable.hammer_7,
+            R.drawable.hammer_8,
+            R.drawable.hammer_9,
+            R.drawable.hammer_10
+    };
+
     private int bg_id;
     private int workLength, shortBreak,longBreak;
     private long id;
     private RadioLayout river,rain,wave,bird,fire;
+
+    //工作期间跳转到其他页面,默认为false
+    private boolean out_flag = false;
+    private boolean popDialog = false;
 
     /**
      * 新建跳转到MainActivity 的 intent
@@ -403,16 +422,43 @@ public class ClockActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
         reload();//重载
+        Intent intent = getIntent();
+        out_flag = intent.getBooleanExtra("out_flag",false);
+        if(out_flag && !popDialog){
+            intent.putExtra("out_flag",false);
+            popDialog = true;
+            final MaterialDialog dialog = new MaterialDialog(ClockActivity.this);
+            LayoutInflater layoutInflater = LayoutInflater.from(this);
+            View view = layoutInflater.inflate(R.layout.dialog_image,null);
+            dialog.setView(view);
+            ImageView imageView = view.findViewById(R.id.pop_image);
+            Random random = new Random();
+            Drawable drawable = getDrawable(hammerImageArray[random.nextInt(hammerImageArray.length)]);
+            imageView.setBackground(drawable);
+            dialog.show();
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    popDialog = false;
+                }
+            });
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("ClockActivity_test: ","onResume");
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ClockService.ACTION_COUNTDOWN_TIMER);
         registerReceiver(mIntentReceiver, intentFilter);
@@ -421,12 +467,14 @@ public class ClockActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d("ClockActivity_test: ","onPause");
         unregisterReceiver(mIntentReceiver);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d("ClockActivity_test: ","onDestroy");
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         releaseImageViewResouce(clock_bg);
     }

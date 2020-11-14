@@ -13,7 +13,9 @@
 
     <color name="black_semi">#3B3B3B</color>
 
+    <!--基准颜色 -->
     <color name="grey">#14d0d0d0</color>
+    <color name="black">#dc000000</color>
 
     <!-- 倒计时钟 -->
     <color name="colorStrokeCircle">#55ffffff</color>
@@ -22,6 +24,7 @@
     <!-- 水纹 -->
     <color name="colorRipple">#F4A5A0</color>
 
+    <!--半黑-->
     <color name="half_black">#808080</color>
 
     <color name="white_pressed">#f1f1f1</color>

@@ -1,24 +1,29 @@
 package com.example.todolist.Activity;
 
 import android.Manifest;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -28,23 +33,22 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.todolist.Adapter.FragmentAdapter;
-import com.example.todolist.Bean.Todos;
 import com.example.todolist.DBHelper.MyDatabaseHelper;
-import com.example.todolist.Dao.TodoDao;
 import com.example.todolist.Fragment.ClockFragment;
 import com.example.todolist.Fragment.TodoFragment;
 import com.example.todolist.R;
+import com.example.todolist.Utils.SPUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.kekstudio.dachshundtablayout.DachshundTabLayout;
 import com.kekstudio.dachshundtablayout.indicators.DachshundIndicator;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import me.drakeet.materialdialog.MaterialDialog;
 import top.wefor.circularanim.CircularAnim;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener
@@ -63,6 +67,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private ViewPager myViewPager;
 
     private MenuItem myMenuItem;
+
+    //是否开启专注模式 控件
+    private SwitchCompat isFocus;
+    private static final String KEY_FOCUS = "focus";
+
+    //获取用户现在的应用栈
+    private UsageStatsManager usageStatsManager;
+    private List<UsageStats> queryUsageStats;
 
 
     @Override
@@ -287,19 +299,90 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 drawer.openDrawer(GravityCompat.START); //弹出侧滑菜单
                 break;
             case R.id.action_settings:
-                //调用相应事件
-                //补充
-                Toast.makeText(this,"You clicked 设置!",Toast.LENGTH_SHORT).show();
-                break;
+                //点击设置，跳转到设置SettingsActivity
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivityForResult(intent,1);
+                return true;
             case R.id.menu_focus:
-                //调用相应事件
-                //补充
-                Toast.makeText(this,"You clicked 专注模式!",Toast.LENGTH_SHORT).show();
-                break;
+                //点击弹出选择框
+                final MaterialDialog focusDialog = new MaterialDialog(MainActivity.this);
+                //加载布局文件
+                LayoutInflater layoutInflater = LayoutInflater.from(this);
+                View view = layoutInflater.inflate(R.layout.dialog_focus, null);
+                //弹出框加载布局
+                focusDialog.setView(view);
+                //获取实例
+                isFocus = view.findViewById(R.id.sw_focus);
+                isFocus.setChecked(getIsFocus(this));
+                isFocus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked){
+                            if (Build.VERSION.SDK_INT >= 21){
+                                if (!isNoSwitch()){
+                                    RequestPromission();
+                                }
+                            }
+                            //保存数据
+                            SPUtils.put(MainActivity.this, KEY_FOCUS, isChecked);
+                        } else {
+                            SPUtils.put(MainActivity.this, KEY_FOCUS, isChecked);
+                        }
+                    }
+                });
+                focusDialog.setTitle("专注模式");
+                focusDialog.setCanceledOnTouchOutside(true);
+                focusDialog.show();// 显示对话框
+                return true;
             default:
                 break;
         }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 判断用户是否选择专注模式
+     * @param context
+     * @return
+     */
+    public boolean getIsFocus(Context context){
+        Boolean isFocus = (Boolean) SPUtils.get(context, KEY_FOCUS, false);
+        return isFocus;
+    }
+
+    /**
+     * 判断“查看应用使用情况”是否开启
+     * @return
+     */
+    private boolean isNoSwitch() {
+        long ts = System.currentTimeMillis();
+        if(Build.VERSION.SDK_INT >=21){
+            //noinspection ResourceType
+            usageStatsManager = (UsageStatsManager)this.getApplicationContext().getSystemService("usagestats");
+            queryUsageStats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, 0, ts);
+        }
+        if (queryUsageStats == null || queryUsageStats.isEmpty()) {
+            return false;
+        }
         return true;
+    }
+
+    /**
+     * 跳转到“查看应用使用情况”页面
+     */
+    public void RequestPromission() {
+        final MaterialDialog dialog = new MaterialDialog(this);
+        dialog.setTitle("提示")
+                .setMessage(String.format(Locale.US,"打开专注模式请允App查看应用的使用情况。"))
+                .setPositiveButton("开启", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
+        dialog.show();
     }
 
     /**
@@ -320,6 +403,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    /**
+     * 用户点击返回键事件
+     */
+    @Override
+    public void onBackPressed() {
+        //如果有弹出侧滑菜单，则回缩侧滑菜单
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     /**
      * NavigationView头部设置监听事件
@@ -353,6 +449,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_setting:
                 //跳转到设置页面
                 //补充
+                Intent intent2 = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivityForResult(intent2,1);
                 break;
             case R.id.nav_about:
                 //跳转到关于页面
@@ -405,6 +503,5 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if(!applyList.isEmpty()){
             ActivityCompat.requestPermissions(this,applyList.toArray(tmpList),123);
         }
-
     }
 }

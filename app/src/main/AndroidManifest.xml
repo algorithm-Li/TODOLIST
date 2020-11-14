@@ -56,18 +56,24 @@
             android:name=".Activity.ClockActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask"
-            android:excludeFromRecents="true"/>
+            android:excludeFromRecents="true">
+        </activity>
 
         <activity
             android:name=".Activity.NewClockActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
+            android:name=".Activity.SettingsActivity"
+            android:theme="@style/AppTheme">
+        </activity>
 
         <service android:name=".Service.AlarmService"
             android:process=":live">
             <intent-filter>
                 <action
-                    android:name="com.example.todolist.Service.AlarmService"
-                    />
+                    android:name="com.example.todolist.Service.AlarmService" />
             </intent-filter>
         </service>
 
@@ -86,6 +92,7 @@
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />
+
     </application>
 
 </manifest>

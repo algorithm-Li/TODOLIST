@@ -36,6 +36,7 @@ public class FocusService extends Service {
             if(isPrevent()){
                 Intent intentNewActivity = new Intent(FocusService.this, ClockActivity.class);
                 intentNewActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intentNewActivity.putExtra("out_flag", true);
                 startActivity(intentNewActivity);
             }
 

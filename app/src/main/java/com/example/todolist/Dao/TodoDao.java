@@ -1,6 +1,5 @@
 package com.example.todolist.Dao;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
