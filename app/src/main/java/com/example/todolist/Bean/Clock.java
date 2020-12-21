@@ -1,6 +1,8 @@
 package com.example.todolist.Bean;
 
-public class Clock {
+import cn.bmob.v3.BmobObject;
+
+public class Clock extends BmobObject {
     private int id;
     private String title;
     private long time;
@@ -8,7 +10,6 @@ public class Clock {
     private String end_time;
     private long duration;
     private String date_add;
-
     public void setId(int id){
         this.id = id;
     }

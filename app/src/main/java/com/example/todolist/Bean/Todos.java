@@ -2,7 +2,9 @@ package com.example.todolist.Bean;
 
 import java.util.Date;
 
-public class Todos {
+import cn.bmob.v3.BmobObject;
+
+public class Todos extends BmobObject {
 
     //数据
     private String title;

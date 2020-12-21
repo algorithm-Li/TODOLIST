@@ -10,7 +10,7 @@
 
     <string name="tab_title_main_1">待办事项</string>
     <string name="tab_title_main_2">锤子时钟</string>
-    <string name="tab_title_main_3">待办事项test</string>
+    <string name="tab_title_main_3">屏幕使用时间统计</string>
     <string name="delete">删除</string>
     <string name="edit">编辑</string>
 
@@ -47,7 +47,6 @@
     <string name="toast_tick_sound_on">白噪音已开启</string>
     <string name="toast_tick_sound_off">白噪音已关闭</string>
 
-
     <!-- 设置 -->
     <string name="pref_title_tick_title">定时器设置</string>
     <string name="pref_title_work_length">番茄钟时长</string>
@@ -57,7 +56,16 @@
     <string name="pref_title_frequency_value">%1$d 个番茄</string>
     <string name="pref_title_time_value">%1$d 分钟</string>
 
-
     <string name="focus_explain">说明：开启专注模式需要开启“获取应用情况”权限，打开此开关并开始番茄计时，除本App之外的所有非系统App将会被拦截</string>
+
+    <string name="appbar_circleimageview_behavior">com.example.todolist.CircleImageInUsercBehavior</string>
+    <string name="appbar_overscroll_behavior">com.example.todolist.AppBarLayoutOverScrollViewBehavior</string>
+
+    <string name="schedule_today_title">今日数据</string>
+    <string name="schedule_amount_title">累计数据</string>
+    <string name="schedule_durations">番茄时间</string>
+    <string name="schedule_times">番茄次数</string>
+    <string name="schedule_done">完成次数</string>
+    <string name="schedule_amount_summary">注意：卸载应用，累计数据将重新计算!</string>
 
 </resources>

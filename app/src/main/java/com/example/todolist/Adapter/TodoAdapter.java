@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -24,14 +25,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.todolist.Activity.MainActivity;
+import com.example.todolist.Activity.NewTodoActivity;
 import com.example.todolist.Anim.ExpandableViewHoldersUtil;
 import com.example.todolist.Bean.Todos;
+import com.example.todolist.Bean.User;
 import com.example.todolist.DBHelper.MyDatabaseHelper;
 import com.example.todolist.Dao.TodoDao;
 import com.example.todolist.Interface.ItemTouchHelperAdapter;
 import com.example.todolist.Interface.OnItemClickListener;
 import com.example.todolist.R;
 import com.example.todolist.Utils.BitmapUtils;
+import com.example.todolist.Utils.NetWorkUtils;
 import com.example.todolist.Utils.ToDoUtils;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
@@ -41,6 +45,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
+import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder>
@@ -333,6 +340,22 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                                         insertTodo.setIsFinish(0);
                                         long tid = new TodoDao(myContext).create(insertTodo);
                                         insertTodo.setTid((int)tid);
+                                        //保存数据到Bmob
+                                        if(NetWorkUtils.isNetworkConnected(myContext) && User.getCurrentUser(User.class)!= null){
+                                            insertTodo.save(new SaveListener<String>() {
+                                                @Override
+                                                public void done(String s, BmobException e) {
+                                                    if(e==null){
+                                                        Log.i("bmob","保存到Bmob成功 "+ insertTodo.getObjectId());
+                                                    }else{
+                                                        Log.i("bmob","保存到Bmob失败："+e.getMessage());
+                                                    }
+                                                }
+                                            });
+
+                                        } else {
+                                            Toasty.info(myContext, "请先登录", Toast.LENGTH_SHORT, true).show();
+                                        }
                                         taskTodos.add(insertTodo);
                                         taskAdapter.notifyDataSetChanged();
                                         if(bean.getIsFinish() == 1){

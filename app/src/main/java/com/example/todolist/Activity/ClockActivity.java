@@ -39,7 +39,6 @@ import com.example.todolist.Widget.RippleWrapper;
 import com.google.android.material.snackbar.Snackbar;
 import com.jaouan.compoundlayout.RadioLayout;
 
-import java.util.Objects;
 import java.util.Random;
 
 import es.dmoral.toasty.Toasty;

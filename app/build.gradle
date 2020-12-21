@@ -20,6 +20,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -29,7 +36,7 @@ dependencies {
 
     //Material库
     implementation 'com.google.android.material:material:1.2.1'
-    implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     //Dachshund-Tab-Layout 方式的viewPage左右滑动
     implementation 'com.github.Andy671:Dachshund-Tab-Layout:v0.3.3'
@@ -61,6 +68,23 @@ dependencies {
 
     //自定义Button
     implementation 'com.lai:buttonStyle:1.0.2'
+
+    //Bmob所需
+    implementation 'cn.bmob.android:bmob-sdk:3.7.8'
+    implementation "io.reactivex.rxjava2:rxjava:2.2.8"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+    implementation 'com.squareup.okio:okio:2.2.2'
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    //Toasty
+    implementation 'com.github.GrenderG:Toasty:1.5.0'
+
+    //开屏动效
+    implementation 'site.gemus:openingstartanimation:1.0.0'
+
+    //用户引导
+    implementation 'com.github.huburt-Hu:NewbieGuide:v2.4.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

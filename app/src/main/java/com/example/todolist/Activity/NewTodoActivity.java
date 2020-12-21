@@ -1,6 +1,5 @@
 package com.example.todolist.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -34,10 +33,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.todolist.Bean.Todos;
+import com.example.todolist.Bean.User;
 import com.example.todolist.Dao.TodoDao;
 import com.example.todolist.R;
 import com.example.todolist.Service.AlarmService;
+import com.example.todolist.Utils.NetWorkUtils;
 import com.example.todolist.Utils.PermissionPageUtils;
+import com.example.todolist.Utils.SPUtils;
 import com.github.jorgecastilloprz.FABProgressCircle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -46,6 +48,9 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.Random;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.SaveListener;
 import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -258,7 +263,10 @@ public class NewTodoActivity extends BaseActivity {
                     todos.setF_tid(F_tid);
                     todos.setIsFinish(isFinish);
 
-                    //如果是编辑操作
+                    boolean isSync = (Boolean) SPUtils.get(getApplication(),"sync",true);
+                    Log.i("ToDo", "isSync: " + isSync);
+
+
                     if(isEdit){
                         //todos.setTid(tid);
                         //更新数据
@@ -267,6 +275,34 @@ public class NewTodoActivity extends BaseActivity {
                     }else{
                         //插入数据
                         new TodoDao(getApplicationContext()).create(todos);
+
+                    }
+                    //如果是编辑操作
+                    if(isEdit){
+                        //todos.setTid(tid);
+                        //更新数据
+                        //Log.d("update","更新成功");
+                        //new TodoDao(getApplicationContext()).updateOneTodo(tid,todos);
+                    }else {
+                        if(isSync){
+                            //保存数据到Bmob
+                            if(NetWorkUtils.isNetworkConnected(getApplication()) && User.getCurrentUser(User.class)!= null){
+                                todos.save(new SaveListener<String>() {
+                                    @Override
+                                    public void done(String s, BmobException e) {
+                                        if(e==null){
+                                            //插入本地数据库
+                                            Log.i("bmob","保存到Bmob成功 "+ todos.getObjectId());
+                                        }else{
+                                            Log.i("bmob","保存到Bmob失败："+e.getMessage());
+                                        }
+                                    }
+                                });
+
+                            } else {
+                                Toasty.info(NewTodoActivity.this, "请先登录", Toast.LENGTH_SHORT, true).show();
+                            }
+                        }
                     }
                     //后台服务
                     startService(new Intent(NewTodoActivity.this, AlarmService.class));

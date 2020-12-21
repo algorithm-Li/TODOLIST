@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,11 +33,20 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import com.app.hubert.guide.NewbieGuide;
+import com.app.hubert.guide.model.GuidePage;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.example.todolist.Adapter.FragmentAdapter;
+import com.example.todolist.Bean.User;
 import com.example.todolist.DBHelper.MyDatabaseHelper;
 import com.example.todolist.Fragment.ClockFragment;
+import com.example.todolist.Fragment.ShowTimeFragment;
 import com.example.todolist.Fragment.TodoFragment;
 import com.example.todolist.R;
+import com.example.todolist.Utils.NetWorkUtils;
 import com.example.todolist.Utils.SPUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -47,9 +57,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.DownloadFileListener;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.update.BmobUpdateAgent;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.drakeet.materialdialog.MaterialDialog;
 import top.wefor.circularanim.CircularAnim;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener
         , View.OnClickListener {
@@ -76,6 +94,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private UsageStatsManager usageStatsManager;
     private List<UsageStats> queryUsageStats;
 
+    public User local_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +117,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setHomeAsUpIndicator(R.drawable.ic_menu);
         }
+
+        //是否仅在WIFI下检测更新
+        BmobUpdateAgent.setUpdateOnlyWifi(true);
 
         //获取DrawerLayout实例
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -155,6 +177,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         dbHelper = new MyDatabaseHelper(this,"Data.db",null,1);
         dbHelper.getWritableDatabase();
 
+        if (NetWorkUtils.isNetworkConnected(getApplication())){
+
+            if (User.getCurrentUser(User.class) != null){
+                try{
+                    setUserDataFromBmob();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        }else {
+            glideLoad();
+        }
+
         //动态获取权限
         initPermission();
 
@@ -163,6 +199,27 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         //初始化滑动分页
         initViewPager();
+
+        //初始化引导
+        initGuide();
+
+        //检测更新
+        BmobUpdateAgent.update(this);
+    }
+
+    /**
+     * 用户引导
+     */
+    private void initGuide(){
+        NewbieGuide.with(this)
+                .setLabel("guide1")
+                .setShowCounts(1)//控制次数
+                .alwaysShow(false)//总是显示，调试时可以打开
+                .addGuidePage(GuidePage.newInstance()
+                        .addHighLight(fab)
+                        .setLayoutRes(R.layout.guide_main))
+                .show();
+
     }
 
     /**
@@ -184,11 +241,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         List<String> tab_titles = new ArrayList<>();
         tab_titles.add(getString(R.string.tab_title_main_1));
         tab_titles.add(getString(R.string.tab_title_main_2));
+        tab_titles.add(getString(R.string.tab_title_main_3));
 
         //获取Fragment
         List<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new TodoFragment(this));
         fragmentList.add(new ClockFragment());
+        fragmentList.add(new ShowTimeFragment());
 
         //限制2个
         myViewPager.setOffscreenPageLimit(2);
@@ -214,6 +273,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         @Override
         public void onPageSelected(int position) {
             if(position == 0) {
+                fab.setVisibility(View.VISIBLE);
                 fab.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v){
@@ -231,6 +291,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     }
                 });
             }else if(position == 1){
+                fab.setVisibility(View.VISIBLE);
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -247,6 +308,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                 });
                     }
                 });
+            }
+            else if(position == 2){
+                fab.setVisibility(View.GONE);
             }
         }
 
@@ -271,6 +335,30 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                             }
                         });
 
+                break;
+            case R.id.user_image:
+            case R.id.nick_name:
+                //判断登录状态决定进入登录界面还是
+                //个人信息界面
+                CircularAnim.fullActivity(MainActivity.this, v)
+                        .colorOrImageRes(R.drawable.ic_img7)
+                        .go(new CircularAnim.OnAnimationEndListener() {
+                            @Override
+                            public void onAnimationEnd() {
+                                DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                                drawer.closeDrawer(GravityCompat.START);
+                                if (NetWorkUtils.isNetworkConnected(getApplication())){
+                                    local_user = User.getCurrentUser(User.class);
+                                }
+                                if (local_user != null){
+                                    Intent intent = new Intent(MainActivity.this, UserDataActivity.class);
+                                    startActivityForResult(intent, 1);
+                                } else {
+                                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivityForResult(intent,1);
+                                }
+                            }
+                        });
                 break;
             default:
                 break;
@@ -442,6 +530,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_clock:
                 myViewPager.setCurrentItem(1);
                 break;
+            case R.id.nav_time:
+                myViewPager.setCurrentItem(2);
+                break;
             case R.id.nav_record:
                 //跳转到记录页面
                 //补充
@@ -461,6 +552,66 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
+    /**
+     * 从Bmob加载用户信息
+     */
+    private void setUserDataFromBmob(){
+        User user = User.getCurrentUser(User.class);
+        BmobQuery<User> bmobQuery = new BmobQuery<User>();
+        bmobQuery.getObject(user.getObjectId(), new QueryListener<User>() {
+            @Override
+            public void done(final User user, BmobException e) {
+                nick_name.setText(user.getNickName());
+                autograph.setText(user.getAutograph());
+            }
+        });
+    }
+
+
+    /**
+     * Glide图片加载
+     */
+    private void glideLoad(){
+
+        RequestOptions options1 = new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .signature(new ObjectKey(SPUtils.get(MainActivity.this,"head_signature","")))
+                .placeholder(R.drawable.default_photo);
+
+        RequestOptions options2 =new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .signature(new ObjectKey(SPUtils.get(MainActivity.this,"head_signature","")))
+                .placeholder(R.drawable.ic_img1);
+
+        Glide.with(getApplicationContext())
+                .load(SPUtils.get(MainActivity.this, "path" ,""))
+                .apply(options1)
+                .into(user_image);
+
+        Glide.with(getApplicationContext())
+                .load(SPUtils.get(MainActivity.this, "path" ,""))
+                .apply(options2)
+                .into(nav_bg);
+    }
+
+    //回调刷新
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 2){
+            finish();
+            Intent intent = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(intent);
+
+        }
+        if (resultCode ==3){
+            Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
+    }
 
     /**
      * 动态获取权限，申请

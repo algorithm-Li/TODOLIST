@@ -40,43 +40,57 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.NewTodoActivity">
+        <activity
+            android:name=".Activity.AppsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".Activity.WeekStats"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask"/>
+        <activity
+            android:name=".Activity.ShowTimeActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTask"/>
+        <activity android:name=".Activity.UserDataActivity" />
+        <activity android:name=".Activity.RegisterActivity" />
+        <activity android:name=".Activity.LoginActivity" />
 
-        </activity>
-        <activity android:name=".Activity.MainActivity"
-            android:launchMode="singleTask">
+        <provider
+            android:name="cn.bmob.v3.util.BmobContentProvider"
+            android:authorities="com.example.todolist.BmobContentProvider"
+            android:exported="false" />
+
+        <activity android:name=".Activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".Activity.NewTodoActivity" />
+        <activity
+            android:name=".Activity.MainActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".Activity.ClockActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:excludeFromRecents="true"
             android:launchMode="singleTask"
-            android:excludeFromRecents="true">
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.NewClockActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity.SettingsActivity"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme" />
 
-        <service android:name=".Service.AlarmService"
+        <service
+            android:name=".Service.AlarmService"
             android:process=":live">
             <intent-filter>
-                <action
-                    android:name="com.example.todolist.Service.AlarmService" />
+                <action android:name="com.example.todolist.Service.AlarmService" />
             </intent-filter>
         </service>
-
         <service
             android:name=".Service.FocusService"
             android:enabled="true"
@@ -84,15 +98,13 @@
         <service
             android:name=".Service.ClockService"
             android:enabled="true"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
         <receiver
             android:name=".Receiver.AlarmReceiver"
             android:enabled="true"
             android:exported="true"
             android:process=":remote" />
-
     </application>
 
 </manifest>

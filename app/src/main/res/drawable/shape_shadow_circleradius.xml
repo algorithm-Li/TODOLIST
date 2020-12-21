@@ -12,4 +12,6 @@
         android:color="#dddddd"/>
     <!--背景填充色 -->
     <solid android:color="#fff"/>
+
+
 </shape>
