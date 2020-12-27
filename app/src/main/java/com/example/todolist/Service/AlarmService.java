@@ -2,14 +2,12 @@ package com.example.todolist.Service;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 import androidx.annotation.Nullable;
 
-import com.carmelo.library.KeepLiveManager;
 import com.carmelo.library.KeepliveService;
 import com.example.todolist.Bean.Todos;
 import com.example.todolist.Receiver.AlarmReceiver;

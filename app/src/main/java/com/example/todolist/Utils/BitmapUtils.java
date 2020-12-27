@@ -6,6 +6,10 @@ import android.graphics.BitmapFactory;
 
 import java.io.InputStream;
 
+/**
+ * 图片处理工具
+ * @author Algorithm
+ */
 public class BitmapUtils {
 
     /**

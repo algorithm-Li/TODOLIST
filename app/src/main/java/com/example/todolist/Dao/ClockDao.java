@@ -13,10 +13,13 @@ import com.example.todolist.DBHelper.MyDatabaseHelper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * 数据处理DAO
+ * 时钟数据
+ */
 public class ClockDao {
     static final String TABLE_NAME = "timer_schedule";
     static final String _ID = "_id";

@@ -44,6 +44,10 @@ import java.util.Random;
 import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
+/**
+ * 锤子时钟页面
+ * @author Algotithm
+ */
 public class ClockActivity extends BaseActivity {
 
     //成员变量
@@ -65,6 +69,7 @@ public class ClockActivity extends BaseActivity {
     private static final String KEY_FOCUS = "focus";
     private ImageView clock_bg;
     private ImageButton bt_music;
+    //背景图片
     private static int[] imageArray = new int[]{
             R.drawable.ic_img2,
             R.drawable.ic_img3,
@@ -78,7 +83,7 @@ public class ClockActivity extends BaseActivity {
             R.drawable.ic_img11,
             R.drawable.ic_img12
     };
-
+    //弹出锤子警告图片
     private static int[] hammerImageArray = new int[]{
             R.drawable.hammer_1,
             R.drawable.hammer_2,
@@ -102,9 +107,10 @@ public class ClockActivity extends BaseActivity {
     private boolean popDialog = false;
 
     /**
-     * 新建跳转到MainActivity 的 intent
-     * @param context
-     * @return
+     * 必须重写该方法，不然跳转不了
+     * 新建跳转到 MainActivity 的 intent
+     * @param context 上下文
+     * @return 返回生成的Intent
      */
     public static Intent newIntent(Context context) {
         return new Intent(context, MainActivity.class);
@@ -113,7 +119,7 @@ public class ClockActivity extends BaseActivity {
     /**
      * ClockActivity 创建调用的 onCreate函数
      * 用来初始化
-     * @param savedInstanceState
+     * @param savedInstanceState 初始化数据
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +196,7 @@ public class ClockActivity extends BaseActivity {
         mBtnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //开启ClockService服务
                 Intent i = ClockService.newIntent(getApplicationContext());
                 i.setAction(ClockService.ACTION_START);
                 i.putExtra("id",id);
@@ -199,6 +206,7 @@ public class ClockActivity extends BaseActivity {
                 i.putExtra("longBreak",longBreak);
                 startService(i);//开启服务
                 mApplication.start();
+                //更新UI界面
                 updateButtons();
                 updateTitle();
                 updateRipple();

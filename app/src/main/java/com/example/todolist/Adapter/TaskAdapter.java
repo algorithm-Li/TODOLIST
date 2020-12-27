@@ -47,6 +47,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
     }
 
+    /**
+     * 构造函数
+     * @param context 上下文
+     * @param todosList 数据
+     * @param F_tid 父id
+     * @param percent 父任务的完成百分比控件
+     */
     public TaskAdapter(Context context,List<Todos> todosList,int F_tid, TextView percent){
         this.context = context;
         this.todosList = todosList;
@@ -98,7 +105,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
         public void bind(final int pos, final Todos bean) {
             //加载数据
-            task_id.setText(pos + 1 +".".toString());
+            task_id.setText(pos + 1 + ".");
             task_content.setText(bean.getDsc());
             //动态按钮设置状态
 

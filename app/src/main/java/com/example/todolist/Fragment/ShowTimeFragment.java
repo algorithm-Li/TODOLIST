@@ -1,7 +1,6 @@
 package com.example.todolist.Fragment;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,6 +15,10 @@ import com.example.todolist.Activity.ShowTimeActivity;
 import com.example.todolist.Activity.WeekStats;
 import com.example.todolist.R;
 
+/**
+ * 三个选项，选择显示应用使用时间项目
+ * @author Algorithm
+ */
 public class ShowTimeFragment extends Fragment implements View.OnClickListener {
 
     private RelativeLayout screenTime;

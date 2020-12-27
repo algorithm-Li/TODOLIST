@@ -22,6 +22,10 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import es.dmoral.toasty.Toasty;
 
+/**
+ * 注册页面
+ * @author Algotithm
+ */
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
 
     private EditText mEtUserName;
@@ -32,7 +36,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //初始化状态栏
         setStatusBar();
+        //加载布局文件
         setContentView(R.layout.activity_register);
         mEtUserName = (EditText) findViewById(R.id.register_name);
         mEtPassWord = (EditText) findViewById(R.id.register_pwd);
@@ -138,7 +144,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                 break;
 
-            case R.id.back_login:
+            case R.id.back_login://返回登录页面操作
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();

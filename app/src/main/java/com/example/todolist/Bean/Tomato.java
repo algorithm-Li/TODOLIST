@@ -1,5 +1,8 @@
 package com.example.todolist.Bean;
 
+/**
+ * 锤子时钟数据
+ */
 public class Tomato {
     private String title;
     private Clock clock;

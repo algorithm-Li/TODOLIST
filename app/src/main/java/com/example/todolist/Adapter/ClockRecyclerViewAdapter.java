@@ -47,7 +47,6 @@ public class ClockRecyclerViewAdapter extends RecyclerView.Adapter<ClockRecycler
         this.context=context;
     }
 
-
     //自定义ViewHolder类
     static class ViewHolder extends RecyclerView.ViewHolder{
 

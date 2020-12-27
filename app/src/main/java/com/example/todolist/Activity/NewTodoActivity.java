@@ -48,12 +48,15 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.Random;
 
-import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.SaveListener;
 import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
+/**
+ * 新建和编辑待办事项页面
+ * @author Algotithm
+ */
 public class NewTodoActivity extends BaseActivity {
 
     private Toolbar toolbar;
@@ -228,7 +231,7 @@ public class NewTodoActivity extends BaseActivity {
             }
         });
 
-
+        //点击确认按钮
         fab_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -372,6 +375,9 @@ public class NewTodoActivity extends BaseActivity {
         mMin = ca.get(Calendar.MINUTE);
     }
 
+    /**
+     * 初始化背景页面
+     */
     private void initHeadImage(){
         //产生一个随机数
         //加载画面
@@ -440,6 +446,9 @@ public class NewTodoActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 判断没有开启的权限
+     */
     private void checkNotificationPermission(){
         NotificationManagerCompat manager = NotificationManagerCompat.from(getApplication());
         boolean isOpened = manager.areNotificationsEnabled();

@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Application 单例类 ，保存相应数据，不同场景，当前状态的 数据和默认数据
+ * @author Algorithm
  */
 public class ClockApplication extends Application {
     public static final int DEFAULT_WORK_LENGTH = 25;

@@ -32,7 +32,10 @@ import com.example.todolist.Widget.ClockApplication;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-
+/**
+ * 时钟后台服务
+ * @author Algorithm
+ */
 public class ClockService extends Service implements CountDownTimer.OnCountDownTickListener {
 
     public static final String ACTION_COUNTDOWN_TIMER = "com.example.todolist.COUNTDOWN_TIMER";

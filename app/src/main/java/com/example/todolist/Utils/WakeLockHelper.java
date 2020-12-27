@@ -5,6 +5,7 @@ import android.os.PowerManager;
 
 /**
  * 闹钟提醒帮助类
+ * @author Algorithm
  */
 public class WakeLockHelper {
     private final String mWakeLockId;

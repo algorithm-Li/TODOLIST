@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,17 +57,17 @@ import java.util.List;
 import java.util.Locale;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.update.BmobUpdateAgent;
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.drakeet.materialdialog.MaterialDialog;
 import top.wefor.circularanim.CircularAnim;
 
-import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
-
+/**
+ * 主页面
+ * @author Algotithm
+ */
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener
         , View.OnClickListener {
 
@@ -264,6 +263,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+    //viewpager点击事件，page切换事件
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -272,6 +272,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         @Override
         public void onPageSelected(int position) {
+            //决定fab关联的activity和是否显示
             if(position == 0) {
                 fab.setVisibility(View.VISIBLE);
                 fab.setOnClickListener(new View.OnClickListener(){
@@ -376,14 +377,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     /**
      * 点击toolbar上的不同菜单，响应不同事件
-     * @param item
-     * @return
+     * @param item 点击的菜单
+     * @return 不使用
      */
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
         switch(item.getItemId()){
-            case android.R.id.home:
+            case android.R.id.home://侧滑页面
                 drawer.openDrawer(GravityCompat.START); //弹出侧滑菜单
                 break;
             case R.id.action_settings:
@@ -408,7 +409,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         if (isChecked){
                             if (Build.VERSION.SDK_INT >= 21){
                                 if (!isNoSwitch()){
-                                    RequestPromission();
+                                    RequestPermission();
                                 }
                             }
                             //保存数据
@@ -430,8 +431,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     /**
      * 判断用户是否选择专注模式
-     * @param context
-     * @return
+     * @param context 上下文
+     * @return 返回true/false
      */
     public boolean getIsFocus(Context context){
         Boolean isFocus = (Boolean) SPUtils.get(context, KEY_FOCUS, false);
@@ -440,7 +441,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     /**
      * 判断“查看应用使用情况”是否开启
-     * @return
+     * @return 返回true/false
      */
     private boolean isNoSwitch() {
         long ts = System.currentTimeMillis();
@@ -458,7 +459,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     /**
      * 跳转到“查看应用使用情况”页面
      */
-    public void RequestPromission() {
+    public void RequestPermission() {
         final MaterialDialog dialog = new MaterialDialog(this);
         dialog.setTitle("提示")
                 .setMessage(String.format(Locale.US,"打开专注模式请允App查看应用的使用情况。"))

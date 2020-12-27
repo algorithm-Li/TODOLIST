@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * 专注后台服务
+ * @author Algorithm
+ */
 public class FocusService extends Service {
 
     boolean flag = true;// 用于停止线程

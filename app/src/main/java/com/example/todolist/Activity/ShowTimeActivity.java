@@ -47,6 +47,11 @@ import static com.example.todolist.Activity.WeekStats.weekUsage;
 import static com.example.todolist.Activity.WeekStats.weekAverage;
 import static getappusageinfo.DateTransUtils.milliseconds2hms;
 
+/**
+ * 展示使用时间排行前五的应用信息
+ * 以及今天截至至打开这个页面使用屏幕的时间
+ * @author Algotithm
+ */
 public class ShowTimeActivity extends AppCompatActivity {
 
     //导航栏
@@ -276,7 +281,7 @@ public class ShowTimeActivity extends AppCompatActivity {
         aaChartView.aa_drawChartWithChartModel(piegraph);
     }
 
-    //
+    //初始化一周数据
     public void initial_weekstats()
     {
         mUseTimeDataManager = UseTimeDataManager.getInstance(ShowTimeActivity.this);
@@ -308,7 +313,7 @@ public class ShowTimeActivity extends AppCompatActivity {
     }
 
     //权限-----------------
-    //坑，关于PACKAGE_USAGE_STATS，requestPermissions不会提醒，需要以下两个方法
+    //关于PACKAGE_USAGE_STATS，requestPermissions不会提醒，需要以下两个方法
     private boolean checkUsagePermission() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
             AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);

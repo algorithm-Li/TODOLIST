@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 时间格式化工具
+ * @author Algorithm
  */
 public class TimeFormatUtil {
     public static String formatTime(long millis) {

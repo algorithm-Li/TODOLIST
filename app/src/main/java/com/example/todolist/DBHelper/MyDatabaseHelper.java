@@ -61,7 +61,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * 数据库创建
-     * @param db
+     * @param db 数据库对象
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -73,9 +73,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 
     /**
      * 数据库更新
-     * @param db
-     * @param oldVersion
-     * @param newVersion
+     * @param db 数据库对象
+     * @param oldVersion 老版本
+     * @param newVersion 新版本
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

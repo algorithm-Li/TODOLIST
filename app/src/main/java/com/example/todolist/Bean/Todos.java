@@ -1,9 +1,10 @@
 package com.example.todolist.Bean;
 
-import java.util.Date;
-
 import cn.bmob.v3.BmobObject;
 
+/**
+ * 待办事项数据类
+ */
 public class Todos extends BmobObject {
 
     //数据
@@ -14,8 +15,8 @@ public class Todos extends BmobObject {
     private int tid,isAlerted,isRepeat,imgId;
     private long remindTime,remindTimeNoDay;
     private String dbObjectId;
-    private int F_tid;
-    private int isFinish;
+    private int F_tid;//父id
+    private int isFinish;//完成标志
 
     //构造函数
     public Todos() {

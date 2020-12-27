@@ -39,9 +39,9 @@ import java.util.Random;
 
 import me.drakeet.materialdialog.MaterialDialog;
 
-
 /**
  * 新建待办事项类
+ * @author Algotithm
  */
 public class NewClockActivity extends BaseActivity {
 

@@ -1,10 +1,11 @@
 package com.example.todolist.Bean;
 
 import android.graphics.Bitmap;
-
 import cn.bmob.v3.BmobUser;
-import cn.bmob.v3.datatype.BmobFile;
 
+/**
+ * 用户
+ */
 public class User extends BmobUser {
 
     //private BmobFile img;

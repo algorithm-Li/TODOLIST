@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -51,24 +50,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
-import cn.bmob.v3.listener.UploadFileListener;
 import de.hdodenhof.circleimageview.CircleImageView;
 import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
+/**
+ * 用户数据页面
+ * @author Algotithm
+ */
 public class UserDataActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = "login";
-    //@ViewInject(R.id.user_head)
     private CircleImageView user_head;
-    //@ViewInject(R.id.takePic)
     private Button takePic;
-    //@ViewInject(R.id.takeGallery)
     private Button takeGallery;
     private static final int CODE_GALLERY_REQUEST = 0xa0;
     private static final int CODE_CAMERA_REQUEST = 0xa1;
@@ -106,9 +103,9 @@ public class UserDataActivity extends BaseActivity implements View.OnClickListen
         setUserDataFromBmob();
         glideLoad();
         //initGuide();
-
     }
 
+    //初始化页面
     private void initView(){
         toolbar_username = (TextView) findViewById(R.id.toolbar_username);
         tv_nickname = (TextView) findViewById(R.id.nickname);
@@ -117,9 +114,9 @@ public class UserDataActivity extends BaseActivity implements View.OnClickListen
         user_head = (CircleImageView) findViewById(R.id.user_head);
         top_bg = (ImageView) findViewById(R.id.top_bg);
         toolbar_userhead = (CircleImageView) findViewById(R.id.toolbar_userhead);
-
     }
 
+    //初始化ViewPager
     private void initViewPager() {
 
         mTabLayout = (DachshundTabLayout) findViewById(R.id.tab_layout_user);
@@ -145,17 +142,7 @@ public class UserDataActivity extends BaseActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.takePic:
-//                mCameradialog.cancel();
-//                autoObtainCameraPermission();
-//                break;
-//            case R.id.takeGallery:
-//                mCameradialog.cancel();
-//                autoObtainStoragePermission();
-//                break;
-//            default:
-//        }
+
     }
 
     /**
@@ -280,28 +267,6 @@ public class UserDataActivity extends BaseActivity implements View.OnClickListen
                 toolbar_username.setText(user.getNickName());
                 tv_nickname.setText(user.getNickName());
                 tv_autograph.setText(user.getAutograph());
-//                BmobFile userImg = user.getImg();
-//                SPUtils.put(UserDataActivity.this,"URL",userImg.getUrl());
-//                userImg.download(new DownloadFileListener() {
-//                    @Override
-//                    public void done(String path, BmobException e) {
-//                        if(e==null){
-//                            Log.i(TAG, "保存路径: " + path);
-//                            imgPath = path;
-//                            SPUtils.put(UserDataActivity.this, "path", imgPath);
-//                            SPUtils.put(UserDataActivity.this, "head_signature", String.valueOf(System.currentTimeMillis()));
-//                            glideLoad();
-//
-//                        }else{
-//                            Log.i(TAG, "下载失败" + e.getMessage());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onProgress(Integer integer, long l) {
-//
-//                    }
-//                });
             }
         });
     }
@@ -383,8 +348,6 @@ public class UserDataActivity extends BaseActivity implements View.OnClickListen
                     Toasty.info(this, "请允许打开相机", Toast.LENGTH_SHORT, true).show();
                 }
                 break;
-
-
             }
             //调用系统相册申请Sdcard权限回调
             case STORAGE_PERMISSIONS_REQUEST_CODE:

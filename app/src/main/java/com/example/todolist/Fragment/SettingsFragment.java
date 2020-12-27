@@ -28,6 +28,10 @@ import com.example.todolist.Utils.SPUtils;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * 设置页面
+ * @author Algorithm
+ */
 public class SettingsFragment extends PreferenceFragment {
 
     private RingtonePreference mRingtone;
@@ -59,6 +63,9 @@ public class SettingsFragment extends PreferenceFragment {
         setChangeListener();
     }
 
+    /**
+     * 初始化页面内容
+     */
     public void intView(){
         preferenceScreen = getPreferenceScreen();
         mRingtone = (RingtonePreference) preferenceScreen.findPreference(KEY_RINGTONE);
@@ -75,6 +82,9 @@ public class SettingsFragment extends PreferenceFragment {
         mFocus.setChecked(getIsFocus(getActivity()));
     }
 
+    /**
+     * 配置修改事件
+     */
     public void setChangeListener(){
         mRingtone.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override

@@ -1,6 +1,5 @@
 package com.example.todolist.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import com.example.todolist.R;
 
 /**
  * RecyclerView适配器
+ * @author Algotithm
  */
 public class RankRecyclerViewAdapter extends RecyclerView.Adapter<RankRecyclerViewAdapter.ViewHolder> {
 

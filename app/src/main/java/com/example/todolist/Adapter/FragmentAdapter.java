@@ -7,6 +7,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
+/**
+ * ViewPager加载Fragment适配器
+ * @author Algotithm
+ */
 public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     private List<Fragment> fragmentList;
@@ -21,8 +25,8 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     /**
      * 获取Fragment
-     * @param position
-     * @return
+     * @param position 位置
+     * @return fragment
      */
     @NonNull
     @Override
@@ -32,7 +36,7 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     /**
      * 获取总量
-     * @return
+     * @return fragment数量
      */
     @Override
     public int getCount() {
@@ -41,8 +45,8 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     /**
      * 获取tab_title
-     * @param position
-     * @return
+     * @param position 标题位置
+     * @return 返回标题内容
      */
     @Override
     public CharSequence getPageTitle(int position){

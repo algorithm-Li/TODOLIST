@@ -1,6 +1,5 @@
 package com.example.todolist.Fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,6 +26,10 @@ import com.example.todolist.Utils.TomatoUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 时钟面板
+ * @author Algorithm
+ */
 public class ClockFragment extends Fragment {
 
     private Context context;
@@ -119,6 +122,9 @@ public class ClockFragment extends Fragment {
         super.onResume();
     }
 
+    /**
+     * 设置数据Clock
+     */
     private void setDbData(){
         localTomato = TomatoUtils.getAllTomato(getContext());
         if (localTomato.size() > 0) {
@@ -128,6 +134,7 @@ public class ClockFragment extends Fragment {
 
     /**
      * 设置list数据
+     * @param newList 新数据
      */
     private void setListData(List<Tomato> newList) {
         clockList.clear();

@@ -24,6 +24,10 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import es.dmoral.toasty.Toasty;
 
+/**
+ * 数据页面
+ * @author Algorithm
+ */
 public class StatisticFragment extends Fragment {
 
     private User user;

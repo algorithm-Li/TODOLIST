@@ -16,6 +16,7 @@ import es.dmoral.toasty.Toasty;
 /**
  * 基类，用来测试Activity创建销毁状态
  * 实时获取网络状态
+ * @author Algotithm
  */
 public class BaseActivity extends AppCompatActivity {
 
@@ -26,6 +27,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //添加开启的activity
         ActivityCollector.addActivity(this);
 
         //初始化
@@ -33,20 +35,22 @@ public class BaseActivity extends AppCompatActivity {
 
         //注册网络状态监听广播
         networkReceiver = new NetworkReceiver();
+        //过滤器
         IntentFilter filter = new IntentFilter();
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(ConnectivityManager.EXTRA_NO_CONNECTIVITY);
+        //启动
         registerReceiver(networkReceiver,filter);
         isRegistered = true;
 
         Toasty.Config.getInstance().apply();
-
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //删除activity
         ActivityCollector.removeActivity(this);
         //解绑
         if(isRegistered){

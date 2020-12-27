@@ -9,7 +9,9 @@ import android.util.Log;
 
 import cn.bmob.v3.Bmob;
 
-
+/**
+ * 判断网络连接
+ */
 public class NetworkReceiver extends BroadcastReceiver {
 
     private static final String APP_ID = "0ceb0a60a0331da80f73f11072d820f4";

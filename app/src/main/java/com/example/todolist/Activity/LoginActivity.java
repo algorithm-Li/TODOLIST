@@ -38,6 +38,10 @@ import cn.bmob.v3.listener.SaveListener;
 import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
+/**
+ * 登录页面
+ * @author Algotithm
+ */
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
     private Button mBtnLogin;
@@ -51,14 +55,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private CheckBox mRememberCheck;
     private TextView sign_in,skip_login;
 
+    /**
+     * 初始化 onCreate
+     * @param savedInstanceState 初始化数据
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //设置状态栏
         setStatusBar();
+        //设置布局文件
         setContentView(R.layout.activity_login);
+        //参数获取
         login_sp = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRemember = login_sp.getBoolean("remember_password",false);
         initView();
+        //如果是记住密码状态
         if(isRemember){
             //将账号和密码都设置到文本中
             String account=login_sp.getString("account","");
@@ -69,6 +81,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    //初始化布局界面
     private void initView(){
         mBtnLogin = (Button) findViewById(R.id.btn_login);
         progress = findViewById(R.id.login_layout_progress);
@@ -85,19 +98,23 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         sign_in.setOnClickListener(this);
         skip_login.setOnClickListener(this);
 
+        //登录键，动画加载
         mBtnLogin.setOnClickListener(new animationOnClickListener(this, mBtnLogin));
     }
 
+    /**
+     * 点击事件
+     * @param v 控件
+     */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.sign_in:
+            case R.id.sign_in://注册键
                 Intent intent1 = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent1);
                 break;
 
-            case R.id.skip_login:
-
+            case R.id.skip_login://跳过键
                 final MaterialDialog skipDialog = new MaterialDialog(this);
                 skipDialog.setTitle("提示")
                         .setMessage("跳过登录将无法使用云同步功能，数据将无法备份，是否跳过")
@@ -121,10 +138,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         }
     }
 
+    /**
+     * 登录动画 + 登录判断
+     */
     class animationOnClickListener implements View.OnClickListener{
         private Context context;
         private TextView btnLogin;
-
 
         public animationOnClickListener(Context context, Button btnLogin){
             this.btnLogin = btnLogin;
@@ -147,6 +166,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 inputAnimator(mInputLayout, mWidth, mHeight);
 
+                //登录判断操作
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -197,7 +217,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 }, 2000);
 
             }
-
         }
     }
 
@@ -216,7 +235,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         params.leftMargin = 0;
         params.rightMargin = 0;
         mInputLayout.setLayoutParams(params);
-
 
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(mInputLayout, "scaleX", 0.5f,1f );
         animator2.setDuration(500);

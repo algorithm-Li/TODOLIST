@@ -11,6 +11,7 @@ import java.util.Map;
  * SharedPreferences存储工具类
  * 键值对存储
  * 设置文件名称："share_data"
+ * @author Algorithm 
  */
 public class SPUtils {
     //不可修改变量

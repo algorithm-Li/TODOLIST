@@ -16,13 +16,16 @@ import com.example.todolist.Utils.NetWorkUtils;
 import com.example.todolist.Utils.SPUtils;
 
 import cn.bmob.v3.Bmob;
-import site.gemus.openingstartanimation.LineDrawStrategy;
 import site.gemus.openingstartanimation.NormalDrawStrategy;
 import site.gemus.openingstartanimation.OpeningStartAnimation;
 
+/**
+ * 开机动画页面
+ * @author Algotithm
+ */
 public class SplashActivity extends BaseActivity {
 
-    private final int SPLASH_DISPLAY_LENGTH = 1500;
+    private final int SPLASH_DISPLAY_LENGTH = 1500; // 开机时间
     private static final String APP_ID = "0ceb0a60a0331da80f73f11072d820f4";
     private NetworkReceiver networkReceiver;
     private FileUtils fileUtils;
@@ -47,10 +50,10 @@ public class SplashActivity extends BaseActivity {
         startService(new Intent(this,AlarmService.class));
         OpeningStartAnimation openingStartAnimation = new OpeningStartAnimation.Builder(this)
                 .setDrawStategy(new NormalDrawStrategy())//设置动画效果
-                .setAppIcon(resource.getDrawable(R.drawable.ic_begin))
-                .setColorOfAppName(R.color.colorPrimary)
-                .setAppStatement("happy everyday！！！")
-                .setColorOfAppStatement(R.color.colorPrimaryDark)
+                .setAppIcon(resource.getDrawable(R.drawable.ic_begin)) //图标
+                .setColorOfAppName(R.color.colorPrimary) //颜色
+                .setAppStatement("happy everyday！！！")//下面的语句
+                .setColorOfAppStatement(R.color.colorPrimaryDark) //颜色
                 .create();
         openingStartAnimation.show(this);
         new Handler().postDelayed(new Runnable() {

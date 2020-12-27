@@ -8,6 +8,7 @@ import android.telephony.TelephonyManager;
 
 /**
  * 网络工具类
+ * @author Algorithm
  */
 public class NetWorkUtils {
 

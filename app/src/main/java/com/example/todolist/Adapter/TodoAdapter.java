@@ -3,9 +3,6 @@ package com.example.todolist.Adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
-import android.text.Html;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +20,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.todolist.Activity.MainActivity;
-import com.example.todolist.Activity.NewTodoActivity;
 import com.example.todolist.Anim.ExpandableViewHoldersUtil;
 import com.example.todolist.Bean.Todos;
 import com.example.todolist.Bean.User;
@@ -34,15 +28,12 @@ import com.example.todolist.Dao.TodoDao;
 import com.example.todolist.Interface.ItemTouchHelperAdapter;
 import com.example.todolist.Interface.OnItemClickListener;
 import com.example.todolist.R;
-import com.example.todolist.Utils.BitmapUtils;
 import com.example.todolist.Utils.NetWorkUtils;
 import com.example.todolist.Utils.ToDoUtils;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.exception.BmobException;
@@ -50,9 +41,14 @@ import cn.bmob.v3.listener.SaveListener;
 import es.dmoral.toasty.Toasty;
 import me.drakeet.materialdialog.MaterialDialog;
 
+/**
+ * 父任务适配器
+ * @author Algotithm
+ */
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder>
         implements ItemTouchHelperAdapter {
 
+    //成员变量
     private Context myContext;
     public List<Todos> todosList;
 
@@ -60,11 +56,13 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
     private MaterialDialog dialog;
     private MyDatabaseHelper dbHelper;
 
+    //构造函数
     public TodoAdapter(Context context,List<Todos> todosList){
         this.myContext = context;
         this.todosList = todosList;
     }
 
+    //点击展开工具
     ExpandableViewHoldersUtil.KeepOneH<TodoViewHolder> keepOne = new ExpandableViewHoldersUtil.KeepOneH<>();
     //点击事件的回调
     private OnItemClickListener<Todos> onItemClickListener;
@@ -73,7 +71,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
     public void setOnItemClickListener(OnItemClickListener<Todos> listener){
         this.onItemClickListener = listener;
     }
-
 
     //长按事件的回调
     private OnItemLongClickListener onItemLongClickListener;
@@ -102,6 +99,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
         return todosList == null? 0 : todosList.size();
     }
 
+    //数据移动
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(todosList, fromPosition, toPosition);
@@ -110,6 +108,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
         return true;
     }
 
+    //删除数据
     @Override
     public void removeItem(int position) {
         truePosition = todosList.size()-1-position;  //数据的真正位置
@@ -120,9 +119,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
 
     //弹窗确认选择和退出
     private void popAlertDialog() {
-
         if (dialog == null) {
-
             dialog = new MaterialDialog(myContext);
             dialog.setMessage("确定删除？")
                     .setPositiveButton("确定", new View.OnClickListener() {
@@ -136,7 +133,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                             //同时删除子任务
                             db.delete("Todos","F_tid = ?",
                                     new String[]{todosList.get(truePosition).getTid()+ ""});
-
                             //若有云数据，在这里删除
                             //补充
                             todosList.remove(truePosition);
@@ -205,7 +201,6 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                 flag = true;
             }
             shineButton.setChecked(flag);//从Todos bean里读取数据
-
 
             taskTodos = ToDoUtils.getTaskTodos(myContext,bean.getTid());
             Log.d("texxttt",bean.getTid()+"");

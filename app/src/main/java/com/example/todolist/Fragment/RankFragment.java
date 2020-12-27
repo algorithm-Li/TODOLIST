@@ -21,6 +21,10 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 
+/**
+ * 排行面板
+ * @author Algorithm
+ */
 public class RankFragment extends Fragment {
 
     private RecyclerView recyclerView;

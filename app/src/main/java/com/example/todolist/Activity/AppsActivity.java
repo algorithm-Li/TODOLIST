@@ -34,6 +34,12 @@ import getappusageinfo.PackageInfo;
 import getappusageinfo.UseTimeDataManager;
 import static getappusageinfo.DateTransUtils.milliseconds2hms;
 
+/**
+ * AppsActivity
+ * 手机非系统应用启动信息
+ * 应用图标，应用名称，应用启动次数，应用启动时间
+ * @author Algotithm
+ */
 public class AppsActivity extends AppCompatActivity {
 
     private TableLayout apps_talbe;
@@ -98,6 +104,7 @@ public class AppsActivity extends AppCompatActivity {
                     //time
                     usedtime.setText(milliseconds2hms(packageInfos.get(i).getmUsedTime()));
                     usedtime.setTextColor(Color.BLACK);
+                    //设置居中
                     usedcount.setGravity(Gravity.CENTER);
                     usedtime.setGravity(Gravity.CENTER);
                     appname.setGravity(Gravity.CENTER);

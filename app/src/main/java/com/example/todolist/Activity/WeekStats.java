@@ -29,6 +29,10 @@ import java.util.List;
 import static getappusageinfo.DateTransUtils.getPastDate;
 import static getappusageinfo.DateTransUtils.milliseconds2hms;
 
+/**
+ * 一周使用数据显示
+ * @author Algotithm
+ */
 public class WeekStats extends AppCompatActivity {
 
     //是否使用特殊的标题栏背景颜色，android5.0以上可以设置状态栏背景色，如果不使用则使用透明色值

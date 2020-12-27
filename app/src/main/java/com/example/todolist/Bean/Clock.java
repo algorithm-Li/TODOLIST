@@ -2,14 +2,19 @@ package com.example.todolist.Bean;
 
 import cn.bmob.v3.BmobObject;
 
+/**
+ * 时钟数据类
+ * @author Algotithm
+ */
 public class Clock extends BmobObject {
-    private int id;
-    private String title;
+    private int id;//id
+    private String title;//标题
     private long time;
     private String start_time;
     private String end_time;
     private long duration;
     private String date_add;
+
     public void setId(int id){
         this.id = id;
     }

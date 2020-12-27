@@ -1,19 +1,22 @@
 package com.example.todolist.Activity;
 
-
 import android.os.Bundle;
 import android.view.MenuItem;
 import androidx.appcompat.widget.Toolbar;
 import com.example.todolist.Fragment.SettingsFragment;
 import com.example.todolist.R;
 
+/**
+ * 设置页面
+ * @author Algotithm
+ */
 public class SettingsActivity extends BaseActivity {
 
     private Toolbar toolbar;
 
     /**
-     * 初始化
-     * @param savedInstanceState
+     * 初始化页面
+     * @param savedInstanceState 初始化数据
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
