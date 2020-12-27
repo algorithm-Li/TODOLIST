@@ -33,11 +33,14 @@ public class FocusService extends Service {
         @Override
         public void run() {
 
+            //Log.d("FocusService","timerTask run");
             if(isPrevent()){
+                Log.d("FocusService","isPrevent");
                 Intent intentNewActivity = new Intent(FocusService.this, ClockActivity.class);
                 intentNewActivity.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intentNewActivity.putExtra("out_flag", true);
                 startActivity(intentNewActivity);
+                Log.d("FocusService","isPrevent2");
             }
 
         }
@@ -133,13 +136,21 @@ public class FocusService extends Service {
         ComponentName topActivity = mActivityManager.getRunningTasks(1).get(0).topActivity;
         String packageName = topActivity.getPackageName();
         */
+        Log.d("FocusService",packageName);
         Context context = getApplicationContext();
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        for (int i = 0; i < packageList.size(); i++) {
-            if(packageName.equals(packageList.get(i)) && !packageName.equals("com.example.todolist") ){
-                Log.i("FocusService", "阻止"+ packageName);
-                return true;
-            }
+
+//        for(int i = 0; i < packageList.size(); i++){
+//
+//        }
+//        for (int i = 0; i < packageList.size(); i++) {
+//            if(packageName.equals(packageList.get(i)) && !packageName.equals("com.example.todolist") ){
+//                Log.i("FocusService", "阻止"+ packageName);
+//                return true;
+//            }
+//        }
+        if(!packageName.equals("com.example.todolist")){
+            return true;
         }
         return false;
     }

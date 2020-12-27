@@ -248,6 +248,10 @@ public class ShowTimeActivity extends AppCompatActivity {
         mUseTimeDataManager.refreshData(0,0);
         final List<PackageInfo> packageInfos = mUseTimeDataManager.getmPackageInfoListOrderByTime();
 
+        for(int i = 0;i<packageInfos.size();i++){
+            Log.d("packageInfos",packageInfos.get(i).getmAppName());
+        }
+
         piegraph = new AAChartModel().chartType(AAChartType.Pie)
                 .backgroundColor("#ffffff")
                 .title("屏幕时间占比")

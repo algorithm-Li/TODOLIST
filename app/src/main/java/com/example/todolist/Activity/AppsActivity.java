@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -97,6 +98,9 @@ public class AppsActivity extends AppCompatActivity {
                     //time
                     usedtime.setText(milliseconds2hms(packageInfos.get(i).getmUsedTime()));
                     usedtime.setTextColor(Color.BLACK);
+                    usedcount.setGravity(Gravity.CENTER);
+                    usedtime.setGravity(Gravity.CENTER);
+                    appname.setGravity(Gravity.CENTER);
                     row.addView(usedtime);
                     row.setVerticalGravity(122);
 
