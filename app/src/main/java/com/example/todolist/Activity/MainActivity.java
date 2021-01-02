@@ -536,11 +536,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case R.id.nav_record:
                 //跳转到记录页面
-                //补充
+                Intent intent3 = new Intent(MainActivity.this, ScheduleActivity.class);
+                startActivity(intent3);
                 break;
             case R.id.nav_setting:
                 //跳转到设置页面
-                //补充
                 Intent intent2 = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivityForResult(intent2,1);
                 break;
